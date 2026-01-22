@@ -2,7 +2,7 @@
 name: User Story
 about: Beschreibe eine konkrete Anforderung aus Nutzersicht.
 title: "[STORY] "
-labels: "type: story"
+labels: [story]
 assignees: ''
 ---
 
