@@ -2,7 +2,7 @@
 name: Feature Request
 about: Schlage eine neue Funktion für das Projekt vor.
 title: "[FEAT] "
-labels: "type: feature"
+labels: [feature]
 assignees: ''
 ---
 
