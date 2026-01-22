@@ -1,6 +1,10 @@
 # myabschlussabproject
 
 ## Overview
+- list my first prompt 
+- list
+- list 
+
 
 This is a Java training project demonstrating software development best practices, including proper project structure, documentation, and development workflows.
 
