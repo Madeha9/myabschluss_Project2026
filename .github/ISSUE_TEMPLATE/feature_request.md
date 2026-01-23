@@ -14,3 +14,4 @@ Warum brauchen wir dieses Feature? Welches Problem löst es?
 
 ### Vorgeschlagene Lösung
 Beschreiben Sie, wie das Feature technisch oder fachlich umgesetzt werden könnte.
+
