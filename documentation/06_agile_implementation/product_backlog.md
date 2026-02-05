@@ -4,18 +4,41 @@
 This document contains the product backlog - the prioritized list of features, enhancements, and fixes for the product.
 
 ## Product Vision
-[Brief description of the product vision]
+The vision of this product is to reduce the reliance on paper invoices by providing a secure and user-friendly
+digital invoice system. Customers can store and manage their purchase invoices digitally,  ensuring they are always 
+available for returns or exchanges even if the paper receipt is lost or damaged. In addition, the system aims to support
+customers during the shopping experience through an AI-based assistant that provides product suggestions for clothing and
+shoes, such as color and style matching. The system also enables users to analyze their monthly shopping activity and
+document their experiences across different physical retail stores.
 
 ## Product Backlog Items
 
-### Epic 1: [Epic Name]
-**Description:** [Epic description]
-**Business Value:** [High/Medium/Low]
-**Status:** [Not Started/In Progress/Done]
+### Epic 1: Invoice Upload and Storage
+**Description:** Users can scan invoices using their device camera or upload existing images or PDF files from the gallery. 
+The system stores the invoices digitally and extracts relevant invoice data, such as QR codes and purchase information, 
+which is then saved in the database.
+**Business Value:** High
+**Status:** iNot Started
 
 #### User Stories
 
-##### PBI-001: [User Story Title]
+##### PBI-001: Scan Invoice with Camera
+**As a** customer
+**I want**  to scan an invoice using my phone camera
+**So that** I can save it digitally in the system
+
+**Acceptance Criteria:**
+- [ ] The user is able to access the device camera and capture an invoice image
+- [ ] The system successfully stores the captured invoice within the application
+- [ ] The user can crop the captured image and select a specific section of the invoice prior to saving
+
+**Priority:** High
+**Estimation:** 5
+**Status:** Backlog
+**Sprint:** [Sprint number or N/A]
+**Notes:** Image quality may affect scan accuracy
+
+##### PBI-002: [User Story Title]
 **As a** [user role]
 **I want** [goal]
 **So that** [benefit]
@@ -23,15 +46,27 @@ This document contains the product backlog - the prioritized list of features, e
 **Acceptance Criteria:**
 - [ ] Criterion 1
 - [ ] Criterion 2
-- [ ] Criterion 3
 
 **Priority:** [High/Medium/Low]
 **Estimation:** [Story points]
 **Status:** [Backlog/Ready/In Progress/Done]
 **Sprint:** [Sprint number or N/A]
-**Notes:** [Additional notes]
 
-##### PBI-002: [User Story Title]
+##### PBI-003: [User Story Title]
+**As a** [user role]
+**I want** [goal]
+**So that** [benefit]
+
+**Acceptance Criteria:**
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+**Priority:** [High/Medium/Low]
+**Estimation:** [Story points]
+**Status:** [Backlog/Ready/In Progress/Done]
+**Sprint:** [Sprint number or N/A]
+
+##### PBI-004: [User Story Title]
 **As a** [user role]
 **I want** [goal]
 **So that** [benefit]
@@ -49,6 +84,21 @@ This document contains the product backlog - the prioritized list of features, e
 **Description:** [Epic description]
 **Business Value:** [High/Medium/Low]
 **Status:** [Not Started/In Progress/Done]
+
+##### PBI-005: [User Story Title]
+**As a** [user role]
+**I want** [goal]
+**So that** [benefit]
+
+**Acceptance Criteria:**
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+**Priority:** [High/Medium/Low]
+**Estimation:** [Story points]
+**Status:** [Backlog/Ready/In Progress/Done]
+**Sprint:** [Sprint number or N/A]
+
 
 #### User Stories
 
