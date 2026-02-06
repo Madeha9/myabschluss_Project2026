@@ -1,66 +1,68 @@
-# Sprint 01
+# Sprint 02
 
 ## Sprint Information
-**Sprint Number:** 01
-**Sprint Goal:** [Define the sprint goal]
-**Start Date:** [YYYY-MM-DD]
-**End Date:** [YYYY-MM-DD]
+**Sprint Number:** 02
+**Sprint Goal:** Implement the first core system functionality by enabling invoice upload and secure storage,
+establishing the foundation for further feature development
+**Start Date:** 2026-02-03
+**End Date:** 2026-02-13
 **Duration:** 10 days
 
 ## Sprint Team
-**Product Owner:** [Name]
-**Scrum Master:** [Name]
+**Product Owner:** Madeha Mohammed
+**Scrum Master:** Madeha Mohammed
 **Development Team:**
-- [Name 1]
-- [Name 2]
-- [Name 3]
+- Madeha Mohammed
 
 ## Sprint Backlog
 
 ### Committed User Stories
 
-#### PBI-001: [User Story Title]
+#### PBI-001: Scan Invoice with Camera
 **Priority:** High
-**Estimation:** [Story points]
-**Assigned to:** [Team member]
+**Estimation:** 5
+**Assigned to:** Madeha Mohammed 
 **Status:** To Do
 
 **Acceptance Criteria:**
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+- [ ] The user can open the camera from the application and capture an invoice image
+- [ ] The user can crop/adjust the captured image to focus on the relevant invoice area
+- [ ] The system stores the captured invoice image and basic metadata (e.g., date/time, filename) successfully
 
 **Tasks:**
-- [ ] Task 1 (Estimated: [hours], Remaining: [hours])
-- [ ] Task 2 (Estimated: [hours], Remaining: [hours])
+- [ ] Create/update UML diagrams  (use case + sequence + class as needed)(Estimated: 20h, Remaining : 20h)
+- [ ] Implement camera capture + crop flow and persist invoice data (Estimated: 16h, Remaining: 16h)
+- [ ] Testing & bug fixes (basic unit/integration + manual test cases) (Estimated: 16h, Remaining: 16h)
 
-**Notes:** [Any notes]
+**Notes:** Scope of this PBI is camera-based scanning only
 
 #### PBI-002: [User Story Title]
 [User story details]
 
 ## Sprint Capacity
 
-| Team Member | Availability (%) | Available Hours | Committed Hours |
-|-------------|------------------|-----------------|-----------------|
-| [Name 1] | 100% | 40 | 0 |
-| [Name 2] | 100% | 40 | 0 |
-| **Total** | | **80** | **0** |
+| Team Member     | Availability (%) | Available Hours | Committed Hours |
+|-----------------|------------------|-----------------|-----------------|
+| Madeha Mohammed | 100%             | 40              | 0               |
+| [Name 2]        | 100%             | 0               | 0               |
+| **Total**       |                  | **40**          | **0**           |
 
 ## Daily Standups
 
-### Day 1 - [Date]
-**Attendees:** [Names]
+### Day 1 - 2026-02-03
+**Attendees:** Madeha Mohammed 
 
 **Updates:**
+- Madeha Mohammed : Yesterday: user case , Today: user case , Blockers: [None/Details]
 - [Member]: Yesterday: [What], Today: [What], Blockers: [None/Details]
+
 
 ## Sprint Burndown
 
-| Day | Date | Remaining Story Points | Remaining Hours |
-|-----|------|------------------------|-----------------|
-| 0 | [Date] | [Points] | [Hours] |
-| 1 | [Date] | [Points] | [Hours] |
+| Day | Date       | Remaining Story Points | Remaining Hours |
+|-----|------------|------------------------|-----------------|
+| 0   | 2026-02-03 | 10                     | 52h             |
+| 1   | [Date]     | [Points]               | [Hours]         |
 
 ## Impediments
 
@@ -100,4 +102,4 @@
 - [ ] [Action item 1] - **Owner:** [Name], **Due:** [Date]
 
 ## Notes and Lessons Learned
-[Additional notes for Sprint 01]
+[Additional notes for Sprint 02]

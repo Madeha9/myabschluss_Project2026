@@ -36,7 +36,7 @@ which is then saved in the database.
 **Priority:** High
 **Estimation:** 5
 **Status:** Backlog
-**Sprint:** [Sprint number or N/A]
+**Sprint:** [02]
 **Notes:** Image quality may affect scan accuracy
 
 ##### PBI-002: Upload Invoice from Device Gallery
