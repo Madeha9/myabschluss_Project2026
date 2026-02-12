@@ -107,10 +107,7 @@ Spring Security 6.x (managed via Spring Boot dependency management)
 **License:**  
 Apache License 2.0 (Open-source)
 
-
 ## Rationale
-
-
 The selected technology stack was chosen to provide a structured, maintainable, and industry-aligned backend architecture.
 
 Spring Boot enables rapid development while supporting a clean layered architecture and RESTful API design.
@@ -123,9 +120,7 @@ Spring Security enables authenticated multi-user access and controlled data auth
 
 Overall, the stack balances simplicity, scalability, and best practices while remaining appropriate for the academic scope of the project.
 
-
 ### Technical Fit
-
 - The selected stack fully supports a layered architecture (Controller–Service–Repository), ensuring clear separation of concerns
 - Spring Boot integrates seamlessly with Hibernate (JPA), PostgreSQL, Flyway, and Spring Security, reducing configuration complexity
 - PostgreSQL provides strong transactional consistency (ACID compliance), which is essential for reliable invoice data management
@@ -133,58 +128,79 @@ Overall, the stack balances simplicity, scalability, and best practices while re
 - OpenAPI integrates directly with Spring Boot, enabling automated API documentation without additional infrastructure
 - The stack is fully compatible with cloud deployment environments
 
-
 ### Team Experience
-- [Team's experience with the technology]
+- The project is developed by a single developer with academic training in Java-based backend development.
+- Prior experience includes working with Java, relational databases, and layered architectural patterns.
+- Spring Boot and related technologies are used as part of professional skill development and portfolio enhancement.
+- The selected stack aligns with current industry standards and supports continued technical growth.
 
 ### Community and Support
-- [Community size, support availability]
+- Spring Boot, Spring Security, and Hibernate are widely adopted industry-standard technologies with extensive documentation and large developer communities.
+- PostgreSQL is a mature and globally supported open-source database system with strong community and enterprise backing.
+- Flyway and OpenAPI are well-documented and actively maintained projects with stable release cycles.
+- The broad ecosystem ensures long-term support, availability of learning resources, and rapid issue resolution.
 
 ### Cost Considerations
-- [Licensing costs, infrastructure costs]
+- All selected technologies (Spring Boot, Spring Security, PostgreSQL, Flyway, OpenAPI) are open-source and licensed under permissive licenses, resulting in no direct licensing costs
+- Development tools are freely available for academic and non-commercial use
+- Infrastructure costs are limited to optional cloud hosting and database services, depending on the selected deployment provider
+- The open-source nature of the stack minimizes vendor lock-in and long-term financial risk
 
 ### Long-term Viability
-- [Technology roadmap, vendor stability]
+
+- Spring Boot and Spring Security are actively maintained and widely adopted frameworks with strong enterprise backing and long-term roadmap stability
+- PostgreSQL is a mature, globally trusted database system with continuous development and long-term community support
+- Flyway and OpenAPI are established projects with stable release cycles and broad industry usage
+- The selected technologies align with current industry standards, ensuring continued relevance and maintainability beyond the academic scope of the project
 
 ## Alternatives Considered
 
 ### Alternative Technology Stack 1
-**Technologies:** [List of technologies]
+**Technologies:** Plain Java (Servlet-based), JDBC, PostgreSQL
 
 **Evaluation:**
-| Criterion | Score (1-5) | Notes |
-|-----------|-------------|-------|
-| Technical Fit | [Score] | [Notes] |
-| Team Experience | [Score] | [Notes] |
-| Community Support | [Score] | [Notes] |
-| Cost | [Score] | [Notes] |
-| Long-term Viability | [Score] | [Notes] |
-| **Total** | **[Total]** | |
 
-**Reason for Rejection:** [Why not chosen]
+| Criterion           | Score (1-5) | Notes                                                                                       |
+|---------------------|-------------|---------------------------------------------------------------------------------------------|
+| Technical Fit       | 3           | Supports layered design but requires significant manual configuration and boilerplate code. |
+| Team Experience     | 4           | Strong familiarity with core Java concepts.                                                 |
+| Community Support   | 5           | Java ecosystem is mature and widely supported.                                              |
+| Cost                | 5           | Fully open-source with no licensing costs.                                                  |
+| Long-term Viability | 4           | Stable and reliable but less aligned with modern backend standards.                         |
+| **Total**           | **21**      |                                                                                             |
 
-### Alternative Technology Stack 2
-**Technologies:** [List of technologies]
+**Reason for Rejection:**  
+Although technically feasible, this approach would require extensive manual configuration, JDBC handling, and security implementation.
+It increases development complexity and reduces maintainability compared to Spring Boot’s integrated ecosystem.
+
+
+## Alternative Technology Stack 2
+**Technologies:** Jakarta EE (JAX-RS), CDI, JPA/Hibernate, PostgreSQL
 
 **Evaluation:**
-| Criterion | Score (1-5) | Notes |
-|-----------|-------------|-------|
-| Technical Fit | [Score] | [Notes] |
-| Team Experience | [Score] | [Notes] |
-| Community Support | [Score] | [Notes] |
-| Cost | [Score] | [Notes] |
-| Long-term Viability | [Score] | [Notes] |
-| **Total** | **[Total]** | |
 
-**Reason for Rejection:** [Why not chosen]
+| Criterion           | Score (1-5) | Notes                                                                                          |
+|---------------------|-------------|------------------------------------------------------------------------------------------------|
+| Technical Fit       | 4           | Provides a solid enterprise backend foundation and supports REST and persistence well.         |
+| Team Experience     | 2           | Higher learning curve and less hands-on experience compared to Spring Boot.                    |
+| Community Support   | 4           | Mature ecosystem with strong standards, but less beginner-friendly documentation and examples. |
+| Cost                | 5           | Open-source and widely available implementations.                                              |
+| Long-term Viability | 4           | Stable and standards-based, suitable for long-term maintenance.                                |
+| **Total**           | **19**      |                                                                                                |
+
+**Reason for Rejection:**  
+While technically suitable, Jakarta EE introduces additional setup and deployment complexity (application server configuration) compared to Spring Boot.
+Spring Boot provides faster development, simpler configuration, and a more streamlined ecosystem for the project scope and timeframe.
+
 
 ## Technology Evaluation Matrix
 
-| Technology | Technical Fit | Team Experience | Community | Cost    | Viability | Total       |
-|------------|---------------|-----------------|-----------|---------|-----------|-------------|
-| [Selected] | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | **[Total]** |
-| [Alt 1]    | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | [Total]     |
-| [Alt 2]    | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | [Total]     |
+| Technology                   | Technical Fit | Team Experience | Community | Cost | Viability | Total  |
+|------------------------------|---------------|-----------------|-----------|------|-----------|--------|
+| Selected (Spring Boot Stack) | 5             | 4               | 5         | 5    | 5         | **24** |
+| Alt 1 (Plain Java + JDBC)    | 3             | 4               | 5         | 5    | 4         | 21     |
+| Alt 2 (Jakarta EE Stack)     | 4             | 2               | 4         | 5    | 4         | 19     |
+
 
 ## Consequences
 
