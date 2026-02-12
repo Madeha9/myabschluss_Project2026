@@ -2,7 +2,8 @@
 
 This directory contains links to the Architecture Decision Records maintained in the main documentation folder.
 
-> **Important:** The actual ADR files are located in the repository root at `/documentation/07_decisions/`, not within the `/docs/` directory. This separation maintains the project's convention of keeping development process documentation separate from user-facing technical documentation.
+> **Important:** The actual ADR files are located in the repository root at `/documentation/07_decisions/`, not within the `/docs/` directory. This separation maintains the project's
+convention of keeping development process documentation separate from user-facing technical documentation.
 
 ## What are ADRs?
 

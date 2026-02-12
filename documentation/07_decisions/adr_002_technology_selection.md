@@ -1,27 +1,43 @@
 # ADR 002: Technology Selection
 
 ## Status
-**Status:** [Proposed/Accepted/Rejected/Deprecated/Superseded]
-**Date:** [YYYY-MM-DD]
-**Decision Makers:** [Names]
+**Status:** Accepted
+**Date:** 2026-02-11
+**Decision Makers:** Madeha Mohammed 
 
 ## Context
-[Describe the context and background of the technology selection decision.]
+
+The Smart Invoice system is developed as a final academic software engineering project. 
+The system aims to digitalize physical retail invoices and provide structured storage, retrieval, 
+and future AI-assisted analysis features. To achieve these objectives, a reliable backend architecture, database persistence
+mechanism, and cloud-compatible deployment environment are required. The technology stack must support clean 
+separation of concerns (Controller–Service–Repository), long-term maintainability, and alignment with industry
+standards in Java-based backend development
 
 ### Problem Statement
-[What technology need or gap are we trying to address?]
+
+The project requires a modern, maintainable Java backend stack that supports a layered architecture,
+reliable persistence for invoice data in a relational database, and compatibility with cloud deployment.
+The chosen technologies must reduce manual boilerplate (e.g., configuration and JDBC code) and enable future
+extension (e.g., AI features) without redesigning the system
 
 ### Requirements
-- [Requirement 1]
-- [Requirement 2]
-- [Requirement 3]
+
+- The stack must support Java 11+
+- The system must follow a layered architecture
+- The backend must support REST API development
+- The solution must use a relational database (PostgreSQL)
+- The project must use Maven for build and dependency management
+- The stack must support testing and maintainability
 
 ### Constraints
-- [Constraint 1]
-- [Constraint 2]
+* Limited to the Java 11+ ecosystem, with Maven for build automation and JPA/Hibernate for persistence
+* * Academic scope and timeframe, with no handling of sensitive banking/payment data.
 
 ## Decision
-[State the technology decision clearly]
+The Smart Invoice system will be implemented using a Java 11+ based technology stack, following a layered architecture 
+The backend will be built with Spring Boot, using Maven for build automation, JPA/Hibernate for persistence,
+and PostgreSQL as the relational database 
 
 ### Selected Technologies
 
@@ -87,11 +103,11 @@
 
 ## Technology Evaluation Matrix
 
-| Technology | Technical Fit | Team Experience | Community | Cost | Viability | Total |
-|------------|---------------|-----------------|-----------|------|-----------|-------|
-| [Selected] | [Score] | [Score] | [Score] | [Score] | [Score] | **[Total]** |
-| [Alt 1] | [Score] | [Score] | [Score] | [Score] | [Score] | [Total] |
-| [Alt 2] | [Score] | [Score] | [Score] | [Score] | [Score] | [Total] |
+| Technology | Technical Fit | Team Experience | Community | Cost    | Viability | Total       |
+|------------|---------------|-----------------|-----------|---------|-----------|-------------|
+| [Selected] | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | **[Total]** |
+| [Alt 1]    | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | [Total]     |
+| [Alt 2]    | [Score]       | [Score]         | [Score]   | [Score] | [Score]   | [Total]     |
 
 ## Consequences
 
