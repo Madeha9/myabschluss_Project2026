@@ -205,32 +205,46 @@ Spring Boot provides faster development, simpler configuration, and a more strea
 ## Consequences
 
 ### Positive Consequences
-- [Consequence 1]
-- [Consequence 2]
+- The selected stack enables rapid backend development with reduced boilerplate configuration.
+- Clear separation of concerns improves maintainability and testability.
+- Built-in security support allows implementation of authenticated multi-user access.
+- Version-controlled database migrations increase deployment reliability.
+- Automated API documentation improves transparency and developer experience.
+- The use of industry-standard technologies strengthens long-term maintainability and portfolio credibility.
+
 
 ### Negative Consequences
-- [Consequence 1]
-- [Consequence 2]
+- The selected stack introduces additional complexity compared to a plain Java implementation.
+- Framework dependencies increase abstraction and may require additional learning and configuration effort.
 
 ### Technical Debt
-[Any technical debt introduced by this decision]
+- Initial security configuration may be implemented at a basic level and refined in future iterations
+- Role-based access control may be simplified during the initial implementation phase
+- Database indexing and performance tuning may be postponed until real-world load scenarios are evaluated
+- API versioning strategy is not fully defined and may require future refinement
+
 
 ### Learning Curve
-[Required learning and training]
+- Deeper understanding of Spring Boot ecosystem and advanced configuration
+- Practical implementation of Spring Security for authentication and authorization
+- Managing database schema migrations using Flyway
+- Designing secure and well-structured REST APIs following best practices
+
 
 ## Implementation
 
 ### Setup and Configuration
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+1. Set up the project structure and dependency management (Maven) and configure the development environment
+2. Configure database connectivity and persistence (PostgreSQL, JPA/Hibernate) and initialize schema migrations (Flyway)
+3. Implement REST endpoints and enable supporting features such as API documentation (OpenAPI) and authentication (if applicable)
 
 ### Training Needs
 - [Training 1]
 - [Training 2]
 
 ### Migration Strategy
-[If migrating from another technology]
+Not applicable – the system is developed as a new implementation and does not replace an existing production system.
+
 
 ## Dependencies
 
