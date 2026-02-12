@@ -1,20 +1,28 @@
 # ADR 001: Architecture Decision
 
 ## Status
-**Status:** [Proposed/Accepted/Rejected/Deprecated/Superseded]
-**Date:** [YYYY-MM-DD]
-**Decision Makers:** [Names]
+**Status:** Accepted
+**Date:** 2026-02-12
+**Decision Makers:** Madeha Mohammed 
 
 ## Context
-[Describe the context and background of the decision. What is the issue that we're seeing that is motivating this decision or change?]
+The project is a cloud-deployed, backend-focused invoice processing system developed using the Java 11+ ecosystem.
+It extracts structured data from physical retail invoices (clothing and shoes) using OCR and stores the data in a relational database.
+
+The application supports multiple users with secure authentication, ensuring each user can store and access only their own invoices.
+The architecture must ensure maintainability, extensibility, scalability, and alignment with professional software engineering standards.
 
 ### Current Situation
-[Describe the current state]
+
+* The project is developed as a final academic backend system
+* The system processes invoice images using OCR and stores structured data in a relational database
+* The application supports multi-user authentication with user-specific invoice ownership
+* The system is deployed in a cloud environment and designed to meet professional backend standards
 
 ### Driving Forces
-- [Force 1]
-- [Force 2]
-- [Force 3]
+- Maintainability through clear separation of concerns
+- Secure multi-user data isolation
+- Alignment with professional backend development standards
 
 ## Decision
 [Describe the decision that was made. State the decision in full sentences, with active voice.]
