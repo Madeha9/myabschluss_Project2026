@@ -1,49 +1,50 @@
-# Use Case XX: [Use Case Name]
+# Use Case 02: Extract Invoice Data with LLM
 
 ## Overview
-**ID:** UC-XX
-**Name:** [Use Case Name]
-**Primary Actor:** [Actor]
-**Secondary Actors:** [Other actors]
-**Brief Description:** [Brief description of the use case]
+**ID:** UC-02  
+**Name:** Extract Invoice Data with LLM  
+**Primary Actor:** User  
+**Secondary Actors:** LLM Service, Backend API  
+**Brief Description:** The system automatically extracts structured invoice data from a submitted invoice using an LLM.
 
 ## Preconditions
-- [Precondition 1]
-- [Precondition 2]
+- Invoice file has been successfully uploaded
+- Invoice file path is stored in the database
 
 ## Postconditions
-- [Postcondition 1]
-- [Postcondition 2]
+- Structured invoice data is stored in the database
+- Return eligibility and return deadline are calculated
 
 ## Main Success Scenario
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
-4. [Step 4]
+1. System retrieves the stored invoice file.
+2. System sends invoice content to the LLM with a structured prompt.
+3. LLM returns structured JSON data.
+4. System validates the response format.
+5. System stores extracted fields in the database.
 
 ## Alternative Flows
 
-### Alternative Flow 1: [Name]
-**Condition:** [When this flow occurs]
-1. [Step 1]
-2. [Step 2]
-3. Return to step X in main flow
+### Alternative Flow 1: Partial Data Extraction
+**Condition:** Some optional fields are missing
+1. System stores available fields.
+2. Missing optional fields are stored as null.
+3. Use case continues successfully.
 
 ## Exception Flows
 
-### Exception Flow 1: [Name]
-**Condition:** [When this exception occurs]
-1. [Step 1]
-2. [Step 2]
-3. Use case ends in failure
+### Exception Flow 1: LLM Failure
+**Condition:** LLM does not return valid JSON
+1. System logs the error.
+2. System returns an error message.
+3. Use case ends in failure.
 
 ## Special Requirements
-- [Requirement 1]
-- [Requirement 2]
+- Strict JSON validation
+- Configurable LLM prompt
 
 ## Frequency of Use
-[How often this use case is expected to occur]
+Frequent (triggered after each invoice submission)
 
 ## Open Issues
-- [Issue 1]
-- [Issue 2]
+- Define exact JSON schema for extraction
+- Define timeout strategy for LLM response
