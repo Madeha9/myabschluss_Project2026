@@ -1,27 +1,39 @@
 # Use Case Overview
 
 ## Introduction
-This document provides an overview of all use cases for the system.
+This document provides an overview of the main use cases of the Invoice Management System.  
+The system allows users to submit invoices, extract structured data using an LLM, store invoices,
+and view return reminders.
 
 ## Use Case Diagram
 [Insert use case diagram here]
 
 ## Use Case List
 
-| ID | Use Case Name | Primary Actor | Priority | Status |
-|----|---------------|---------------|----------|--------|
-| UC-01 | [Use Case 1] | [Actor] | High | Draft |
-| UC-02 | [Use Case 2] | [Actor] | Medium | Draft |
+| ID    | Use Case Name            | Primary Actor | Priority | Status |
+|-------|--------------------------|---------------|----------|--------|
+| UC-01 | Submit Invoice           | User          | High     | Draft  |
+| UC-02 | Extract Invoice Data     | User          | High     | Draft  |
+| UC-03 | View and Manage Invoices | User          | High     | Draft  |
+| UC-04 | View Return Reminders    | User          | Medium   | Draft  |
 
 ## Actors
 
-### [Actor Name 1]
-**Description:** [Actor description]
-**Responsibilities:** [Actor responsibilities]
+### User
+**Description:** A person who uses the system to manage digital invoices.  
+**Responsibilities:**
+- Upload or scan invoices
+- View stored invoices
+- Check return deadlines
+- Delete invoices
 
-### [Actor Name 2]
-**Description:** [Actor description]
-**Responsibilities:** [Actor responsibilities]
+### External Services
+**Description:** External systems that support the application.  
+**Responsibilities:**
+- Cloud Storage Service stores uploaded invoice files
+- LLM Service extracts structured invoice data
 
 ## System Boundaries
-[Define system boundaries and external systems]
+The system includes the backend API, database, and integration with cloud storage and LLM services.  
+The user interacts with the system through a client application (e.g., web interface).  
+External services such as cloud storage and the LLM are outside the system boundary.
