@@ -6,7 +6,9 @@ The system allows users to submit invoices, extract structured data using an LLM
 and view return reminders.
 
 ## Use Case Diagram
-[Insert use case diagram here]
+
+![img.png](Use_Case_Diagram%20_01.png)
+![img.png](Use_Case_Diagram%20_02.png)
 
 ## Use Case List
 
