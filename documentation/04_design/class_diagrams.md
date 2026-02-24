@@ -1,4 +1,4 @@
-# Class Diagrams
+ # Class Diagrams
 
 ## Overview
 This document contains UML class diagrams for the system design.
