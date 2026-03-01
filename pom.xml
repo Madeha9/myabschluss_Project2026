@@ -56,12 +56,12 @@
         <artifactId>quarkus-rest-jackson</artifactId>
     </dependency>
     <!-- ORM (Hibernate) + Panache mix of using traditional SQL and automatic one without writing the inquires -->
-        <!--
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
-         -->
+
         <!--PostgreSQL driver local DB on my Mac) -->
     <dependency>
         <groupId>io.quarkus</groupId>
