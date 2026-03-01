@@ -129,7 +129,7 @@ SQL queries and result mapping are handled manually using `DataSource`, `Prepare
 For the first version, schema changes are handled **manually**:
 
 - SQL scripts are stored in the repository (e.g., `documentation/db/sql/`).
-- Changes are applied locally using a SQL client (psql / DBeaver).
+- Changes are applied locally using a SQL client (psql / pgAdmin).
 
 Future improvement :
 
