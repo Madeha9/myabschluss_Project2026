@@ -106,7 +106,9 @@ CREATE TABLE invoice_item
 - `idx_invoice_item_invoice_id` on `invoice_id`
 
 **Constraints:**
-- [Constraint description]
+
+- invoice_id is a FOREIGN KEY → invoice(id)
+- ON DELETE CASCADE ensures invoice items are removed automatically when an invoice is deleted
 
 ## Object-Relational Mapping (ORM)
 
