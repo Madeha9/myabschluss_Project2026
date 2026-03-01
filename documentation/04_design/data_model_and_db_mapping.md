@@ -74,6 +74,7 @@ CREATE TABLE invoice
     return_days  INTEGER,
     created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
 );
 ```
 
@@ -110,21 +111,46 @@ CREATE TABLE invoice_item
 - invoice_id is a FOREIGN KEY → invoice(id)
 - ON DELETE CASCADE ensures invoice items are removed automatically when an invoice is deleted
 
+
 ## Object-Relational Mapping (ORM)
 
 ### Mapping Strategy
-[Describe the ORM strategy used]
 
-### Class to Table Mappings
-- `ClassName1` → `table_name_1`
-- `ClassName2` → `table_name_2`
+For the first version, the project uses **plain JDBC** (no ORM framework).
+SQL queries and result mapping are handled manually using `DataSource`, `PreparedStatement`, and `ResultSet`.
+
+### Class to Table Mappings (manual mapping)
+
+- `Invoice` → `invoice`
+- `InvoiceItem` → `invoice_item`
 
 ## Data Migration Strategy
-[Describe how data migrations will be handled]
+
+For the first version, schema changes are handled **manually**:
+
+- SQL scripts are stored in the repository (e.g., `documentation/db/sql/`).
+- Changes are applied locally using a SQL client (psql / DBeaver).
+
+Future improvement :
+
+- Introduce **Flyway** for versioned migrations (e.g., `V1__init.sql`, `V2__add_return_days.sql`).
 
 ## Database Optimization
-- [Optimization 1]
-- [Optimization 2]
+
+- Use indexes on frequently filtered/search columns: `invoice_date`, `store_name`, and `invoice_item.invoice_id`.
+- Store the original invoice image externally (cloud storage) and keep only `image_url` in the database to reduce DB
+  size.
 
 ## Backup and Recovery
-[Describe backup and recovery strategy]
+
+Local development backup strategy:
+
+- Create backups using `pg_dump`:
+    - Backup: `pg_dump intelliinvoice > backup.sql`
+    - Restore: `psql intelliinvoice < backup.sql`
+
+Future improvement (optional):
+
+- Automated scheduled backups and retention policy for production deployments.
+
+
