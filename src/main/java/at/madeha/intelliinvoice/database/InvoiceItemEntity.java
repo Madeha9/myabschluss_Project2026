@@ -9,9 +9,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "invoice_item")
 public class InvoiceItemEntity {
-
     @Id //tells hibernate this is a primary key of the table
-    @GeneratedValue //The ID should be generated automatically
+    @GeneratedValue(strategy = GenerationType.UUID) //The ID should be generated automatically
     private UUID id; // Every invoice gets a unique identifier
     /*
     optional = false  each item must belong to an invoice , can not be without invoice
