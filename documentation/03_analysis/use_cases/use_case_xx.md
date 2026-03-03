@@ -1,10 +1,10 @@
 # Use Case XX: [Use Case Name]
 
 ## Overview
-**ID:** UC-XX
-**Name:** [Use Case Name]
-**Primary Actor:** [Actor]
-**Secondary Actors:** [Other actors]
+**ID:** UC-XX  
+**Name:** [Use Case Name]  
+**Primary Actor:** [Actor]  
+**Secondary Actors:** [Other actors]  
 **Brief Description:** [Brief description of the use case]
 
 ## Preconditions
