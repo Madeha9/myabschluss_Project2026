@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This document provides a comprehensive overview of the system architecture for the train_2025_java_aufbau_example_project. It describes the high-level structure, components, and design decisions that shape the application.
+This document provides a comprehensive overview of the system architecture for the intelliInvoice_project.
+It describes the high-level structure, components, and design decisions that shape the application.
 
 ## Table of Contents
 
@@ -42,6 +43,18 @@ This project follows a **Layered Architecture** pattern with clear separation be
 - **Dependency Injection:** For loose coupling between components
 - **Factory Pattern:** For object creation (where applicable)
 
+
+##MyVersion
+##Architectural Patterns
+
+* Layered Architecture: Separation into Presentation (REST Controllers), Business Logic (Services), and Data Access (Repositories).
+* REST Controller Pattern (Spring MVC): HTTP endpoints exposed via @RestController (JSON-based API).
+* Repository Pattern (Spring Data JPA): Data access abstraction using repository interfaces for CRUD and queries.
+* Dependency Injection (IoC): Loose coupling via Spring’s DI (@Service, @Repository, constructor injection).
+* DTO Pattern: Request/response DTOs to separate API contracts from persistence entities.
+* Transaction Management: Declarative transactions for consistency (e.g., @Transactional in service layer).
+* (Optional) Strategy Pattern: For pluggable extraction methods (e.g., OCR vs. manual input) if you implement multiple approaches.
+
 ## System Context
 
 ### System Landscape
@@ -79,9 +92,9 @@ This project follows a **Layered Architecture** pattern with clear separation be
 
 ### External Systems
 
-- **Database:** PostgreSQL/MySQL/H2 for data persistence
+- **Database:** PostgreSQL for data persistence
 - **File System:** For configuration and log files
-- **External APIs:** (If applicable - list any third-party integrations)
+- **External APIs:** (None currently implemented. Future integration with AI services (e.g., OpenAI API) is under consideration.)
 
 ## High-Level Architecture
 
@@ -146,7 +159,6 @@ Cross-Cutting Concerns:
 
 **Key Components:**
 - REST Controllers (if REST API)
-- Web Controllers (if web application)
 - Request/Response DTOs
 - API documentation
 
@@ -195,7 +207,7 @@ Cross-Cutting Concerns:
 - Authentication and authorization
 - Input sanitization
 - SQL injection prevention
-- XSS protection (if web app)
+- XSS protection (if web app) (remove later)
 
 **Configuration:**
 - External configuration files
@@ -211,22 +223,22 @@ Cross-Cutting Concerns:
 
 ### Core Technologies
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Language | Java 11 | Core programming language |
-| Build Tool | Maven | Dependency management and build automation |
-| Framework | (Spring Boot/Jakarta EE/Plain Java) | Application framework |
-| Database | PostgreSQL/MySQL/H2 | Data persistence |
-| ORM | JPA/Hibernate | Object-relational mapping |
-| Testing | JUnit 5, Mockito | Unit and integration testing |
-| Logging | SLF4J + Logback | Logging framework |
+| Layer      | Technology                          | Purpose                                    |
+|------------|-------------------------------------|--------------------------------------------|
+| Language   | Java 11+                            | Core programming language                  |
+| Build Tool | Maven                               | Dependency management and build automation |
+| Framework  | (Spring Boot/Plain Java)            | Application framework                      |
+| Database   | PostgreSQL                          | Data persistence                           |
+| ORM        | JPA/Hibernate                       | Object-relational mapping                  |
+| Testing    | JUnit 5                             | Unit and integration testing               |
+| Logging    | SLF4J + Logback                     | Logging framework                          |
 
 ### Supporting Technologies
 
-- **Version Control:** Git
+- **Version Control:** Git + Github
 - **API Documentation:** Swagger/OpenAPI (if REST API)
 - **JSON Processing:** Jackson/Gson
-- **Database Migration:** Flyway/Liquibase (if applicable)
+- **Database Migration:** Flyway/Liquibase (if applicable- optional / future enhancement)
 
 ## Architecture Decisions
 
@@ -279,7 +291,7 @@ These records document:
 ### Security
 
 - **Authentication:** (Specify mechanism - JWT, Session, etc.)
-- **Authorization:** Role-based access control (if applicable)
+- **Authorization:** Role-based access control (if applicable -)
 - **Data Protection:** Encryption for sensitive data
 - **Input Validation:** All user inputs validated and sanitized
 - **Security Best Practices:**
@@ -337,13 +349,13 @@ These records document:
 
 ### Development Environment
 - Local development with embedded/local database
-- Hot reload for rapid development (if applicable)
+- Hot reload for rapid development (if applicable - DevTools - Spring Boot)
 
 ### Testing Environment
 - Isolated test database
 - Automated testing pipeline
 
-### Production Environment (if applicable)
+### Production Environment (if applicable - for future )
 - Application server
 - Production database
 - Load balancer (for scaling)
@@ -353,8 +365,8 @@ These records document:
 
 - **Technology Stack:** Limited to Java 11+ ecosystem
 - **Database:** Relational database model
-- **Deployment:** (Specify deployment constraints if any)
-- **Performance:** Limited by single-server deployment (if applicable)
+- **Deployment:** Single-instance cloud deployment (no microservices or distributed architecture)
+- **Performance:** Limited by single-server deployment; not optimized for high-scale enterprise traffic
 
 ## Future Considerations
 
@@ -375,6 +387,6 @@ These records document:
 
 ---
 
-**Last Updated:** January 2026  
+**Last Updated:** February 2026  
 **Version:** 1.0  
 **Maintainers:** Project Team
