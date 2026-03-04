@@ -84,14 +84,6 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--  Lombok to generate the getter and setter, hashcode, constructors, after compiler   -->
-        <!--
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        -->
     </dependencies>
     <build>
         <plugins>
