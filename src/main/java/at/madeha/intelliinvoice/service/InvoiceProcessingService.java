@@ -66,17 +66,53 @@ public class InvoiceProcessingService {
         }
     }
 
+    //Find all invoices
+    public List<InvoiceEntity> getAllInvoices() {
+        return repository.findAll();
+    }
+
+    //find by id
+    /*
+    public InvoiceEntity getInvoiceById(UUID invoiceId) {
+    return repository.findById(invoiceId)
+            .orElseThrow(() -> new InvoiceValidationException(
+                    ErrorCode.INVOICE_NOT_FOUND,
+                    "Invoice with id " + invoiceId + " not found"
+            ));
+}
+     */
+    public InvoiceEntity getInvoiceById(UUID id) {
+        return repository.findById(id).orElse(null); // returns null if not found
+    }
     // Delete invoice
     /*
     Optional<InvoiceEntity>
     Optional is a container that may or may not contain a value (to avoid null issues)
     orElseThrow a Method in optional , using lambda
      */
-    public void deleteInvoice(UUID invoiceId) {
+    public boolean deleteInvoice(UUID invoiceId) {
         InvoiceEntity invoice = repository.findById(invoiceId)
                 .orElseThrow(() -> new RuntimeException("Invoice not found"));
 
         repository.deleteById(invoiceId);
         LOG.info("Invoice deleted! Amount: " + invoice.getTotalAmount());
+        return false;
     }
 }
+/* check later on
+public BigDecimal calculateMonthlyTotal(int year, int month) {
+    return repository.findAll() // returns List<InvoiceEntity>
+            .stream()
+            .filter(inv -> inv.getInvoiceDate().getYear() == year
+                        && inv.getInvoiceDate().getMonthValue() == month)
+            .map(InvoiceEntity::getTotalAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add); // sum all totals
+}
+ */
+/*
+public void markInvoiceAsPaid(UUID invoiceId) {
+    InvoiceEntity invoice = repository.findById(invoiceId).orElseThrow();
+    invoice.setStatus(InvoiceStatus.PAID); // set enum
+    repository.persist(invoice);
+}
+ */
