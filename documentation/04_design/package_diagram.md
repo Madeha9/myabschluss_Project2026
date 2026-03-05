@@ -151,7 +151,7 @@ None
 **Key Classes:**
 
 - DateUtils
-- ValidationUtils (optional)
+- ValidationUtils
 
 **Visibility:**
 
