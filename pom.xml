@@ -31,7 +31,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- later on  LangChain4j BOM  when you starting AI integration) -->
+            <!-- later on  LangChain4j BOM  when  starting AI integration) -->
             <!--
             <dependency>
                 <groupId>io.quarkiverse.langchain4j</groupId>
@@ -39,6 +39,9 @@
                 <version>${quarkus-langchain4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+                //das ist from the trainer
+                quarkus.langchain4j.anthropic.chat-model.model-name=claude-sonnet-4-5-20250929
+                quarkus.langchain4j.anthropic.chat-model.max-tokens=1024
             </dependency>
             -->
         </dependencies>
