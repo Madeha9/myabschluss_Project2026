@@ -1,6 +1,6 @@
 # Definition of Done
 
-A work item is considered done when:
+A work item is considered done only when all the following conditions are met:
 
 ## Functional Criteria
 - Feature implemented according to requirements

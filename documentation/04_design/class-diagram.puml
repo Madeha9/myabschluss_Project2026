@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+
+actor User
+actor "LLM Service" as LLM
+
+rectangle "IntelliInvoice System" {
+  usecase "Process Invoice\n(Upload + Extract + Store)" as UC1
+  usecase "View Stored Invoices" as UC2
+}
+
+User --> UC1
+User --> UC2
+
+UC1 --> LLM : extract data
+@enduml
