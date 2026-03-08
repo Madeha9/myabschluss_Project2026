@@ -31,7 +31,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- later on  LangChain4j BOM  when  starting AI integration) -->
+            <!-- later on  LangChain4j BOM  when you starting AI integration) -->
             <!--
             <dependency>
                 <groupId>io.quarkiverse.langchain4j</groupId>
@@ -39,16 +39,12 @@
                 <version>${quarkus-langchain4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-                //das ist from the trainer
-                quarkus.langchain4j.anthropic.chat-model.model-name=claude-sonnet-4-5-20250929
-                quarkus.langchain4j.anthropic.chat-model.max-tokens=1024
             </dependency>
             -->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-
         <!-- REST API (Quarkus REST), for get,set, http, controller , frontend later  -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -60,7 +56,6 @@
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
         <!-- ORM (Hibernate) + Panache mix of using traditional SQL and automatic one without writing the inquires -->
-
 
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -77,7 +72,7 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-validator</artifactId>
         </dependency>
-        <!--  junit5 Tests to test the units -->
+        <!--  junit5 Tests -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -89,11 +84,14 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--  Lombok to generate the getter and setter, hashcode, constructors, after compiler   -->
+        <!--
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>2.22.0</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
+        -->
     </dependencies>
     <build>
         <plugins>
