@@ -41,6 +41,7 @@ services via interfaces.
 
 - InvoiceProcessingService
 - InvoiceValidationService
+- InvoiceReturnService
 - LLMService (interface)
 - StorageService (interface)
 
@@ -132,7 +133,7 @@ None
 
 **Key Classes:**
 
-- AppException
+- InvoiceValidationException
 - ErrorCode
 
 **Visibility:**
@@ -150,7 +151,7 @@ None
 **Key Classes:**
 
 - DateUtils
-- ValidationUtils (optional)
+- ValidationUtils
 
 **Visibility:**
 
