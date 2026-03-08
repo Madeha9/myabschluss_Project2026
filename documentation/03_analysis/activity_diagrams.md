@@ -3,47 +3,57 @@
 ## Overview
 This document contains activity diagrams that model the business processes and workflows.
 
-## Activity Diagram 1: [Process Name]
+## Activity Diagram 1: Process Invoice
 
 ### Description
-[Description of the process or workflow]
-
+The user uploads an invoice image. The system stores the image in cloud storage, extracts structured data using the 
+LLM, validates the extracted fields, saves the invoice data in the database, and returns the processing result to the
+user.
 ### Diagram
-[Insert activity diagram here]
+![img.png](activity_diagram_01.png)
 
 ### Actors
-- [Actor 1]
-- [Actor 2]
+- User
+- IntelliInvoice System
+- LLM Service (external)
+- Cloud Storage (external)
 
 ### Activities
-1. [Activity 1]
-2. [Activity 2]
-3. [Activity 3]
+1. User uploads invoice image
+2. System checks file format and size
+3. System stores the original invoice image in cloud storage
+4. System sends invoice image to the LLM for data extraction
+5. System validates the extracted fields
+6. System stores the invoice data (and extraction result) in the database
+7. System shows a success or failure message to the user
 
 ### Decision Points
-- [Decision point 1]: [Conditions]
-- [Decision point 2]: [Conditions]
+- File valid? (Yes → store image in cloud, No → show upload error and stop)
+- Extraction successful? (Yes → validate extracted data, No → show extraction error and stop)
+- Validation passed? (Yes → store invoice data in database, No → mark as “Needs Review” or show validation error)
 
-## Activity Diagram 2: [Process Name]
+## Activity Diagram 2: View Invoice Details
 
 ### Description
-[Description of the process or workflow]
+User views their stored invoices, selects one invoice, and sees its details. If the invoice doesn’t exist,
+the system shows an error.
 
 ### Diagram
-[Insert activity diagram here]
-
+![img.png](activity_diagram_02.png)
 ### Actors
-- [Actor 1]
-- [Actor 2]
+- User
+- IntelliInvoice System
 
 ### Activities
-1. [Activity 1]
-2. [Activity 2]
-3. [Activity 3]
+1. User opens “Invoices”
+2. System loads invoice list
+3. User selects an invoice
+4. System fetches invoice details
+5. System displays invoice details
 
 ### Decision Points
-- [Decision point 1]: [Conditions]
-- [Decision point 2]: [Conditions]
+- Invoice found? (Yes → display details, No → show “Not Found”)
 
 ## Notes
-[Additional notes about the activity diagrams]
+The diagrams illustrate the main invoice processing workflows. External services (LLM and cloud storage) are
+included in the flow but are outside the system boundary. Error handling is simplified for clarity.
