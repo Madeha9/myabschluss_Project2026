@@ -3,6 +3,7 @@ package at.madeha.intelliinvoice.service;
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 import at.madeha.intelliinvoice.database.InvoiceRepository;
+import at.madeha.intelliinvoice.infrastructure.InvoiceExtractor;
 import at.madeha.intelliinvoice.service.helper.InvoiceUploadService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -25,6 +26,8 @@ public class InvoiceProcessingService {
     the llm will be called here in order to extract the info
      */
     @Inject
+    InvoiceExtractor invoiceExtractor;
+    @Inject
     InvoiceUploadService uploadHelper; //this return the url image after saving it in the s3
     @Inject
     private InvoiceValidationService validationService;
@@ -32,8 +35,6 @@ public class InvoiceProcessingService {
     private InvoiceReturnService returnService;
     @Inject
     private InvoiceRepository repository;
-    @Inject
-    private StorageService storageService;
 
     /*uploadHelper is a helper class  only to upload the image and return the url
     handelhelper calls the upload the class , and return the url
@@ -43,15 +44,21 @@ public class InvoiceProcessingService {
         String imageUrl = uploadHelper.processUploadedInvoice(fileInput, fileName);
         LOG.info("Image uploaded: " + imageUrl);
         return imageUrl;
-    }    // Upload an invoice image then  create invoice entity in the database
+    }
+
+    /* Upload an invoice image then  create invoice entity in the database
+     * we set the url of the image here
+     * the url comes fromthe s3
+     */
     public InvoiceEntity createInvoice(InvoiceEntity invoice) {
+        // upload file and get the URL
         validationService.validate(invoice);
         //now is from the type Instant , to set up the data automatic
         Instant now = Instant.now();
         invoice.setCreatedAt(now);
         invoice.setUpdatedAt(now);
 //        invoice.setImageUrl(cloudStorageService.uploadFile());
-        //linking the child items to the parent invoice
+        //linking the child items to the parent invoice, so that each invoice will have an invoice items
         for (InvoiceItemEntity item : invoice.getItems()) {
             item.setInvoice(invoice);
         }
@@ -62,6 +69,7 @@ public class InvoiceProcessingService {
                 invoice.getInvoiceDate().getYear(),
                 invoice.getInvoiceDate().getMonthValue());
         LOG.info("Monthly total for " + invoice.getInvoiceDate().getMonth() + ": " + monthlyTotal);
+        LOG.info("Invoice saved successfully with URL: " + invoice.getImageUrl());
         return savedInvoice;
     }
 

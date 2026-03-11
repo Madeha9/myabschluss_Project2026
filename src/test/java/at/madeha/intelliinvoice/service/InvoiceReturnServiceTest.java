@@ -37,7 +37,6 @@ public class InvoiceReturnServiceTest {
         testInvoice.setCurrency("USD");
         testInvoice.setTotalAmount(new BigDecimal("300"));
         testInvoice.setCreatedAt(Instant.now());
-        testInvoice.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         testInvoice.setUpdatedAt(Instant.now());
         testInvoice.setReturnDays(14);
         InvoiceItemEntity item = new InvoiceItemEntity();

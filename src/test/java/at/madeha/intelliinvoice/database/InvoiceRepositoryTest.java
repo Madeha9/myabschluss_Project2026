@@ -23,6 +23,13 @@ class InvoiceRepositoryTest {
     @Inject
     InvoiceRepository invoiceRepo;
 
+    //to clean the database after each test
+//    @BeforeEach
+//    @Transactional
+//    public void cleanDatabase() {
+//     invoiceRepo.deleteAll();
+//
+//    }
     @Test
     void save() {
         InvoiceEntity invoiceEntity = new InvoiceEntity();
@@ -31,10 +38,8 @@ class InvoiceRepositoryTest {
         invoiceEntity.setTotalAmount(new BigDecimal("10.50"));
         invoiceEntity.setCurrency("EUR");
         invoiceEntity.setReturnDays(14);
-        invoiceEntity.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         invoiceEntity.setCreatedAt(Instant.now());
         invoiceEntity.setUpdatedAt(Instant.now());
-
         InvoiceEntity newInvoice = invoiceRepo.save(invoiceEntity);
         assertNotNull(newInvoice.getId());
         UUID id = newInvoice.getId();
@@ -50,7 +55,6 @@ class InvoiceRepositoryTest {
         invoiceEntity.setTotalAmount(new BigDecimal("15.50"));
         invoiceEntity.setCurrency("USD");
         invoiceEntity.setReturnDays(14);
-        invoiceEntity.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         invoiceEntity.setCreatedAt(Instant.now());
         invoiceEntity.setUpdatedAt(Instant.now());
         InvoiceEntity newInvoice = invoiceRepo.save(invoiceEntity);
@@ -68,7 +72,6 @@ class InvoiceRepositoryTest {
         invoice1.setInvoiceDate(LocalDate.now());
         invoice1.setTotalAmount(new BigDecimal("13.00"));
         invoice1.setCurrency("USD");
-        invoice1.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         invoice1.setCreatedAt(Instant.now());
         invoice1.setUpdatedAt(Instant.now());
         invoiceRepo.save(invoice1);
@@ -79,7 +82,6 @@ class InvoiceRepositoryTest {
         invoice2.setInvoiceDate(LocalDate.now());
         invoice2.setTotalAmount(new BigDecimal("20.00"));
         invoice2.setCurrency("EUR");
-        invoice2.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         invoice2.setCreatedAt(Instant.now());
         invoice2.setUpdatedAt(Instant.now());
         invoiceRepo.save(invoice2);
@@ -88,8 +90,8 @@ class InvoiceRepositoryTest {
 
         // test
         List<InvoiceEntity> invoices = invoiceRepo.findAll();
-
-        assertTrue(invoices.size() >= 2);
+        //the database should have at leat two line that has beingn ases
+        assertTrue(invoices.size() >= 2, "The database should contain exactly 2 invoices");
     }
 
 
@@ -101,7 +103,6 @@ class InvoiceRepositoryTest {
         invoiceEntity.setTotalAmount(new BigDecimal("15.50"));
         invoiceEntity.setCurrency("USD");
         invoiceEntity.setReturnDays(16);
-        invoiceEntity.setImageUrl("https://www.aiseesoft.com/tutorial/jpg-to-url.html");
         invoiceEntity.setCreatedAt(Instant.now());
         invoiceEntity.setUpdatedAt(Instant.now());
         InvoiceEntity newInvoice = invoiceRepo.save(invoiceEntity);

@@ -60,6 +60,16 @@ public class InvoiceRepository {
 
         em.remove(invoice);
     }
+
+    //just tı clean the database after eah test
+    @Transactional
+    public void deleteAll() {
+//  If you want to respect your CascadeType.ALL, delete objects one by one
+        List<InvoiceEntity> invoices = findAll();
+        for (InvoiceEntity invoice : invoices) {
+            em.remove(invoice);
+        }
+    }
 }
 
 

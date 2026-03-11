@@ -1,6 +1,6 @@
 package at.madeha.intelliinvoice.service.helper;
 
-import at.madeha.intelliinvoice.service.StorageService;
+import at.madeha.intelliinvoice.infrastructure.CloudStorageService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -13,14 +13,15 @@ import java.io.InputStream;
  */
 @ApplicationScoped
 public class InvoiceUploadService {
+    //    StorageService storageService;
 
     @Inject
-    StorageService storageService;
+    CloudStorageService cloudStorageService;
 
     public String processUploadedInvoice(InputStream fileInput, String fileName) {
 
         // upload image to S3
-        String imageUrl = storageService.uploadFile(fileInput, fileName);
+        String imageUrl = cloudStorageService.uploadFile(fileInput, fileName);
 
         return imageUrl;
     }
