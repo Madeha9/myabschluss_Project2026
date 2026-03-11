@@ -13,7 +13,6 @@ package at.madeha.intelliinvoice.restapi;
  */
 
 import at.madeha.intelliinvoice.service.InvoiceProcessingService;
-import at.madeha.intelliinvoice.service.StorageService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -33,10 +32,9 @@ public class UploadController {
    CloudStorage class , we do not have to change the controller , because we do not  use
    the class , we are using the interface
     */
-   InvoiceProcessingService invoiceProcessingService; // The service that saves to DB
+   //we call the invoiceProcessingService so that he saved the file to the cloud and return the url
     @Inject
-    StorageService storageService;
-
+   InvoiceProcessingService invoiceProcessingService; // The service that saves to DB
     @POST
    /*
    we use POSt Https request to create or send file to the server
@@ -52,8 +50,7 @@ public class UploadController {
             @FormParam("uploadInvoice") InputStream fileInput,
             @FormParam("fileName") String fileName) {
         try {
-            String fileUrl = storageService.uploadFile(fileInput, fileName);
-
+            String fileUrl = invoiceProcessingService.handleUpload(fileInput, fileName);
             return Response.ok(Map.of(
                     "message", "File uploaded successfully",
                     "url", fileUrl
