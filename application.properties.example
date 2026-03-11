@@ -1,0 +1,25 @@
+# DATABASE CONFIGURATION
+# -------------------------------
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=your_db_user
+quarkus.datasource.password=your_db_password
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/intelliinvoice
+
+# HIBERNATE CONFIGURATION
+# -------------------------------
+quarkus.hibernate-orm.database.generation=update
+quarkus.hibernate-orm.log.sql=true
+
+# S3 CONFIGURATION
+# -------------------------------
+bucket.name=intelliinvoice-files-wifi-2026
+quarkus.s3.aws.region=eu-north-1
+
+# LLM CONFIGURATION (Anthropic)
+# -------------------------------
+quarkus.langchain4j.anthropic.api-key=REPLACE_WITH_YOUR_KEY
+quarkus.langchain4j.anthropic.chat-model.model-name=claude-3-5-sonnet-20240620
+
+# SERVER CONFIGURATION
+# -------------------------------
+quarkus.http.port=8080
