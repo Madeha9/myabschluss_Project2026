@@ -29,10 +29,6 @@ public class CloudStorageService implements StorageService {
     @Inject
     AWSConfig config;
     private S3Client s3Client;
-//    private final String bucketName = "intelliinvoice-files-wifi-2026";
-//    private final String region = "eu-north-1";
-    //need to update later on
-//    S3Client s3 = S3ClientConfig.createS3Client();
 
     //Constructor
       /*fileupload.filename to get the original name of the uploaded file i which is a unique file name in (Key)
@@ -44,11 +40,7 @@ public class CloudStorageService implements StorageService {
                 .region(Region.of(config.getRegion()))
                 .build();
     }
-//    public CloudStorageService() {
-//        this.s3Client = S3Client.builder()
-//                .region(Region.of(config.getRegion())) //(region)
-//                .build();
-//    }
+
 
     @Override
     /*
@@ -57,13 +49,14 @@ public class CloudStorageService implements StorageService {
     Infos like file name and size etc...
     @param fileUpload is the uploaded file object
      */
-    public String uploadFile(InputStream fileInput, String fileName) {
+    public String uploadFile(InputStream fileInput, String fileName, String contentType) {
         String key = UUID.randomUUID() + "_" + fileName;
+//Update the signature to accept contentType
 
         try {
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(config.getBucketName()) //(bucketName)
-                    .key(key)
+                    .key(key).contentType(contentType)
                     .build();
 
             // Upload to S3 directly from InputStream

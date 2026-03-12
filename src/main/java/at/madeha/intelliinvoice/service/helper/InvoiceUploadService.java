@@ -18,10 +18,11 @@ public class InvoiceUploadService {
     @Inject
     CloudStorageService cloudStorageService;
 
-    public String processUploadedInvoice(InputStream fileInput, String fileName) {
+    public String processUploadedInvoice(InputStream fileInput, String fileName, String contentType) {
 
         // upload image to S3
-        String imageUrl = cloudStorageService.uploadFile(fileInput, fileName);
+        String imageUrl = cloudStorageService.uploadFile(fileInput, fileName, contentType);
+
 
         return imageUrl;
     }
