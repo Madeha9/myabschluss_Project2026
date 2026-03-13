@@ -45,9 +45,26 @@ public class InvoiceRepository {
     }
 
     public List<InvoiceEntity> findAll() {
-        return em.createQuery("select i from InvoiceEntity i", InvoiceEntity.class)
+        // Standard JPA query using JOIN FETCH to load the items collection eagerly
+        /* using the LEFT JOIN FETCH to bring the items even if the list is empty, and load them into memory
+         * we use the Distinct to avoid duplication from the join
+         * this to fetch all  the invoice in one singe database trip
+         * fetch - join : glues items to the invoices immediately reduce (N+1 issues)
+         */
+        return em.createQuery(
+                "SELECT DISTINCT i FROM InvoiceEntity i LEFT JOIN FETCH i.items",
+                InvoiceEntity.class
+        ).getResultList();
+    }
+
+    /**
+     * Search by Store Name.
+     * to search the invoice using the store name
+     */
+    public List<InvoiceEntity> findByStoreName(String name) {
+        return em.createQuery("SELECT i FROM InvoiceEntity i WHERE LOWER(i.storeName) LIKE LOWER(:name)", InvoiceEntity.class)
+                .setParameter("name", "%" + name + "%")
                 .getResultList();
-        //(select i from InvoiceEntity i) is a PQL query (not SQL) to fetch all rows.
     }
 
     @Transactional
