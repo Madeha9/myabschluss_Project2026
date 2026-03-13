@@ -7,6 +7,7 @@ import java.util.UUID;
 
 /*
 represents the   as a plain Java object (without JPA) database and the framework
+* DTO  data transform object
 
  */
 public class Invoice {

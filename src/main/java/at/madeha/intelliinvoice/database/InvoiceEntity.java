@@ -3,14 +3,15 @@ package at.madeha.intelliinvoice.database;
 map the objects to the database , coupled with the framework
  */
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 @Entity
 @Table(name = "invoice")
 public class InvoiceEntity {
@@ -42,7 +43,7 @@ public class InvoiceEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-
+    @JsonManagedReference  //to avoid the infinite loop
     @OneToMany(
             mappedBy = "invoice",
             //when  deleting or saving   the invoice, Hibernate will automatically do the same for the items.
@@ -51,8 +52,7 @@ public class InvoiceEntity {
             orphanRemoval = true
     )
     //this  to list the items of each invoice
-    private List<InvoiceItemEntity> items;
-
+    private List<InvoiceItemEntity> items = new ArrayList<>(); // changed to the array list to avoid the null pointer
     // Constructors
     public InvoiceEntity() {
     }

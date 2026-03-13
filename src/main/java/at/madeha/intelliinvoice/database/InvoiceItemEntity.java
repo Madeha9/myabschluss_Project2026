@@ -4,6 +4,7 @@ gives the  access to JPA annotations like @Entity , @Table etc.... without will 
 * related to framework and the database , to map the entity to the database
  */
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -27,6 +28,8 @@ public class InvoiceItemEntity {
      this a foreign key , can not be null
      */
     @JoinColumn(name = "invoice_id", nullable = false)
+    @JsonBackReference //to avoid the infinite loop between the item and the invoice
+
     //to connect the item to the invoice , a reference to the parent invoice class
     private InvoiceEntity invoice;
 

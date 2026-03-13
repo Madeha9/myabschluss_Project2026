@@ -10,5 +10,5 @@ import java.io.InputStream;
 public interface StorageService {
 
     // a Method to upload the file to the cloud
-    String uploadFile(InputStream fileInput, String fileName);
+    String uploadFile(InputStream fileInput, String fileName, String contentType);
 }
