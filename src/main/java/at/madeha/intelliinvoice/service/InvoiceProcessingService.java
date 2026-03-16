@@ -14,66 +14,21 @@ import org.jboss.logging.Logger;
 
 import java.io.InputStream;
 import java.time.Instant;
-//
-//@ApplicationScoped
-//public class InvoiceProcessingService {
-//    /*
-//    using logger insteadof System out printin
-//     */
-//    private static final Logger LOG = Logger.getLogger(InvoiceProcessingService.class);
-//    /*
-//    the class do the bussein workflow and mean business logic
-//    the llm will be called here in order to extract the info
-//     */
-//    @Inject
-//    InvoiceExtractor invoiceExtractor; // for the llm
-//    @Inject
-//    InvoiceUploadService uploadHelper; //this return the url image after saving it in the s3
-//    @Inject
+import java.util.List;
+import java.util.UUID;
+
 //    private InvoiceValidationService validationService; //to validate the info
 //    @Inject
 //    private InvoiceReturnService returnService;
-//    @Inject
-//    private InvoiceRepository repository;
-//
-//    /*uploadHelper is a helper class  only to upload the image and return the url
-//    handelhelper calls the upload the class , and return the url
-//     */
-//    public String handleUpload(InputStream fileInput, String fileName) {
-//
-//        String imageUrl = uploadHelper.processUploadedInvoice(fileInput, fileName);
-//        LOG.info("Image uploaded: " + imageUrl);
-//        return imageUrl;
-//    }
-//
-//    /* Upload an invoice image then  create invoice entity in the database
-//     * we set the url of the image here
-//     * the url comes fromthe s3
-//     */
-//    public InvoiceEntity createInvoice(InvoiceEntity invoice) {
-//        // upload file and get the URL
-//        validationService.validate(invoice);
-//        //now is from the type Instant , to set up the data automatic
-//        Instant now = Instant.now();
-//        invoice.setCreatedAt(now);
-//        invoice.setUpdatedAt(now);
 
-/// /        invoice.setImageUrl(cloudStorageService.uploadFile());
-//        //linking the child items to the parent invoice, so that each invoice will have an invoice items
-//        for (InvoiceItemEntity item : invoice.getItems()) {
-//            item.setInvoice(invoice);
-//        }
-//        //to calculate the total monthly  amount
-//        InvoiceEntity savedInvoice = repository.save(invoice);
-//        LOG.info("Invoice saved successfully!");
-//        BigDecimal monthlyTotal = returnService.calculateMonthlyTotal(
-//                invoice.getInvoiceDate().getYear(),
-//                invoice.getInvoiceDate().getMonthValue());
-//        LOG.info("Monthly total for " + invoice.getInvoiceDate().getMonth() + ": " + monthlyTotal);
-//        LOG.info("Invoice saved successfully with URL: " + invoice.getImageUrl());
-//        return savedInvoice;
-//    }
-//
+   /*uploadHelper is a helper class  only to upload the image and return the url
+      handelhelper calls the upload the class , and return the url
+     */
+/* Upload an invoice image then  create invoice entity in the database
+ * we set the url of the image here
+ * the url comes from the s3
+ *      */
+
 //    // List all invoices with return info, if there is return policy or not
 //    public void listInvoicesWithReturnInfo() {
 //        List<InvoiceEntity> invoices = repository.findAll();
@@ -88,53 +43,8 @@ import java.time.Instant;
 //            }
 //            String returnMessage = returnService.checkReturnDays(invoice);
 //            LOG.info("Invoice " + invoice.getId() + ": " + returnMessage);
-//        }
-//    }
-//
-//    //Find all invoices
-//    public List<InvoiceEntity> getAllInvoices() {
-//        return repository.findAll();
-//    }
-//
-//    //find by id
-//    /*
-//    public InvoiceEntity getInvoiceById(UUID invoiceId) {
-//    return repository.findById(invoiceId)
-//            .orElseThrow(() -> new InvoiceValidationException(
-//                    ErrorCode.INVOICE_NOT_FOUND,
-//                    "Invoice with id " + invoiceId + " not found"
-//            ));
-//}
-//     */
-//    public InvoiceEntity getInvoiceById(UUID id) {
-//        return repository.findById(id).orElse(null); // returns null if not found
-//    }
-//
-//    // Delete invoice
-//    /*
-//    Optional<InvoiceEntity>
-//    Optional is a container that may or may not contain a value (to avoid null issues)
-//    orElseThrow a Method in optional , using lambda
-//     */
-//    public boolean deleteInvoice(UUID invoiceId) {
-//        InvoiceEntity invoice = repository.findById(invoiceId)
-//                .orElseThrow(() -> new RuntimeException("Invoice not found"));
-//
-//        repository.deleteById(invoiceId);
-//        LOG.info("Invoice deleted! Amount: " + invoice.getTotalAmount());
-//        return false;
-//    }
-//}
-/* check later on
-public BigDecimal calculateMonthlyTotal(int year, int month) {
-    return repository.findAll() // returns List<InvoiceEntity>
-            .stream()
-            .filter(inv -> inv.getInvoiceDate().getYear() == year
-                        && inv.getInvoiceDate().getMonthValue() == month)
-            .map(InvoiceEntity::getTotalAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add); // sum all totals
-}
- */
+
+
 @ApplicationScoped
 public class InvoiceProcessingService {
     private static final Logger LOG = Logger.getLogger(InvoiceProcessingService.class);
@@ -143,7 +53,10 @@ public class InvoiceProcessingService {
     InvoiceUploadService uploadHelper; // Handles the S3/Cloud storage
 
     @Inject
-    InvoiceExtractor extractor;       // LangChain4j AI interface
+    InvoiceExtractor extractor;
+    // LangChain4j AI interface
+    @Inject
+    InvoiceValidationService validationService;
 
     @Inject
     InvoiceRepository repository;     // JPA Repository
@@ -152,10 +65,12 @@ public class InvoiceProcessingService {
     public InvoiceEntity processUploadedInvoice(InputStream fileInput, String fileName, String contentType) {
         String imageUrl;
 
-        // --- STEP 1: UPLOAD ---
+        //  UPLOAD ---
         try {
             imageUrl = uploadHelper.processUploadedInvoice(fileInput, fileName, contentType);
             LOG.info("Step 1 Success: Uploaded to " + imageUrl);
+            //We need to convert the url to avoid the error before sending it to the model
+            imageUrl = java.net.URI.create(imageUrl).toASCIIString();
         } catch (Exception e) {
             LOG.error("Step 1 FAILED (Upload): " + e.getMessage());
             throw new RuntimeException("Cloud Storage Error: Could not upload file.", e);
@@ -206,6 +121,63 @@ public class InvoiceProcessingService {
         } catch (Exception e) {
             LOG.error(" FAILED (Database): " + e.getMessage());
             throw new RuntimeException("Database Error: Could not save extracted data.", e);
+        }
+    }
+
+    //TO Search the invoice using the store name
+    public List<InvoiceEntity> searchByStoreName(String storeName) {
+        LOG.info("Searching for invoices from: " + storeName);
+        return repository.findAll().stream()
+                .filter(inv -> inv.getStoreName() != null &&
+                        inv.getStoreName().equalsIgnoreCase(storeName))
+                .toList();
+    }
+
+    //  calculate total spending in a specific month
+    public java.math.BigDecimal calculateMonthlySpending(int year, int month) {
+        return repository.findAll().stream()
+                .filter(inv -> inv.getInvoiceDate() != null &&
+                        inv.getInvoiceDate().getYear() == year &&
+                        inv.getInvoiceDate().getMonthValue() == month)
+                .map(InvoiceEntity::getTotalAmount)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+    }
+
+    // --- READ (Find by ID) ---
+    public InvoiceEntity getInvoiceById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Invoice with ID " + id + " not found."));
+//                            ErrorCode.INVOICE_NOT_FOUND;
+
+    }
+    /*
+    @findAll is a method to view all the saved invoices
+     */
+
+    public List<InvoiceEntity> findAll() {
+        LOG.info("view all invoices");
+        return repository.findAll();
+    }
+
+    // --- UPDATE (Manual Update) ---
+    @Transactional
+    public InvoiceEntity updateInvoice(InvoiceEntity invoice) {
+//        validationService.validate(invoice);
+        invoice.setUpdatedAt(Instant.now());
+        return repository.save(invoice);
+    }
+
+    // --- DELETE Invoice by ID  ---
+    /*
+    we use the Transactional to ensure that if something went wrong nothing will be saved in the database
+     */
+    @Transactional
+    public void deleteInvoiceById(UUID id) {
+        LOG.info("Deleting invoice ID: " + id);
+        try {
+            repository.deleteById(id);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Delete failed: Invoice not found.");
         }
     }
 }
