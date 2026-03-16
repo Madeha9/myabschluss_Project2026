@@ -67,6 +67,7 @@ public class InvoiceRepository {
                 .getResultList();
     }
 
+
     @Transactional
     public void deleteById(UUID id) {
         InvoiceEntity invoice = em.find(InvoiceEntity.class, id);
