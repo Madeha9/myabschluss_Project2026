@@ -2,11 +2,13 @@ package at.madeha.intelliinvoice.service;
 
 import at.madeha.intelliinvoice.business.Invoice;
 import at.madeha.intelliinvoice.business.InvoiceItem;
+import at.madeha.intelliinvoice.business.InvoiceStatus;
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 import at.madeha.intelliinvoice.database.InvoiceRepository;
 import at.madeha.intelliinvoice.infrastructure.InvoiceExtractor;
 import at.madeha.intelliinvoice.service.helper.InvoiceUploadService;
+import at.madeha.intelliinvoice.service.helper.ReturnStatusInfo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -92,14 +94,21 @@ public class InvoiceProcessingService {
             throw new RuntimeException("AI Extraction Error: The AI could not read the invoice or returned an invalid format.", e);
         }
 
-        // --- STEP 3: MAPPING & DB ---
+        //  MAPPING & DB ---
         try {
             InvoiceEntity entity = new InvoiceEntity();
+            /*the Invoice enum ....
+            to set the Invoice Status  and the day left to retun the Invoice
+             */
             entity.setImageUrl(imageUrl);
             entity.setStoreName(extractedData.getStoreName());
             entity.setTotalAmount(extractedData.getTotalAmount());
             entity.setInvoiceDate(extractedData.getInvoiceDate());
             entity.setCurrency(extractedData.getCurrency());
+            ReturnStatusInfo returnStatusInfo = invoiceReturnService.getReturnStatusUpdate(entity);
+            InvoiceStatus status = returnStatusInfo.status(); //se the Status from the enum and the record after getting the data from the AI so that we
+            //we can use the Invoice date and it is nt null anymore
+            LOG.info("Invoice processed. Days left: " + returnStatusInfo.daysLeft());// the left days is not savd in the database
             Instant now = Instant.now();
             entity.setCreatedAt(now);
             entity.setUpdatedAt(now);

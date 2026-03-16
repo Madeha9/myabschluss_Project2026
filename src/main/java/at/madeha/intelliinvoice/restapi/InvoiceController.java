@@ -39,6 +39,7 @@ package at.madeha.intelliinvoice.restapi;
 
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.service.InvoiceProcessingService;
+import at.madeha.intelliinvoice.service.InvoiceReturnService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -55,11 +56,20 @@ public class InvoiceController {
 
     @Inject
     InvoiceProcessingService invoiceService;
+    @Inject
+    InvoiceReturnService invoiceReturnService;
 
     // find all the Invoice
     @GET
-    public List<InvoiceEntity> getAllInvoices() {
-        return invoiceService.findAll();
+    public List<InvoiceResponseDTO> getAllInvoices() {
+        return invoiceService.findAll().stream()
+                .map(entity -> {
+                    //  calculation of the lefted days and the status
+                    var info = invoiceReturnService.getReturnStatusUpdate(entity);
+                    // Wrap it in the DTO
+                    return new InvoiceResponseDTO(entity, info);
+                })
+                .toList();
     }
 
     // view by id
@@ -67,11 +77,13 @@ public class InvoiceController {
     @Path("/{id}")
     public Response getInvoice(@PathParam("id") UUID id) {
         try {
-            InvoiceEntity invoice = invoiceService.getInvoiceById(id);
-            return Response.ok(invoice).build();
+            InvoiceEntity entity = invoiceService.getInvoiceById(id);
+            //var so that the controller can guess , the type of the variable during the compiling, here replaced the retunstatusInfo
+            var info = invoiceReturnService.getReturnStatusUpdate(entity);
+
+            return Response.ok(new InvoiceResponseDTO(entity, info)).build();
         } catch (RuntimeException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage()).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
 
