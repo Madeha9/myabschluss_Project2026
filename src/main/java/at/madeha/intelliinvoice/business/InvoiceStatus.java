@@ -5,6 +5,7 @@ enum are constant file that we use to save constant options to avoid the user en
 nused in the businss Invoice as database entity
  */
 public enum InvoiceStatus {
-    Returnable, Invalid, CANCELLED, RETURNED,
-
+    RETURNABLE,  // All caps
+    NON_RETURNABLE,
+    SATISFIED
 }

@@ -3,6 +3,7 @@ package at.madeha.intelliinvoice.database;
 map the objects to the database , coupled with the framework
  */
 
+import at.madeha.intelliinvoice.business.InvoiceStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -15,7 +16,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "invoice")
 public class InvoiceEntity {
-
+    /*
+    ı have to write all the info by myself like the @column part then hibernate will only take care of  creating the table in the
+    database
+     */
     @Id
     @GeneratedValue
     private UUID id;
@@ -37,12 +41,23 @@ public class InvoiceEntity {
 
     @Column(name = "return_days")
     private Integer returnDays;
+        /* @Transient :  we use it so that we do not have to create a table/column  in the database
+        it  tells Hibernate that  there is no column in the database  for this
+           Jackson will s call the 'getDaysRemaining()' the result will be added  to the JSON response
+        */
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+    @Enumerated(EnumType.STRING)
+    /* using the annotation enum so that java knows that is an enum will not try  to use a number in the
+    field as a status
+     */
+    @Column(name = "invoice_status")
+    private InvoiceStatus status = InvoiceStatus.RETURNABLE;
+    // we set it to the default then will be changed according to the condiations in the ReturnService class
     @JsonManagedReference  //to avoid the infinite loop
     @OneToMany(
             mappedBy = "invoice",

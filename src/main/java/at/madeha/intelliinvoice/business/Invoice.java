@@ -7,8 +7,8 @@ import java.util.UUID;
 
 /*
 represents the   as a plain Java object (without JPA) database and the framework
-* DTO  data transform object
-
+* DTO  data transform object, we used in the LLm so that we can get a java object instead of getting JSON file , so that  llm
+will match the entity and return a java object instead of JSON file
  */
 public class Invoice {
 
