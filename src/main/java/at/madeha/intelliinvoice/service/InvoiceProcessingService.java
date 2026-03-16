@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -51,7 +52,8 @@ public class InvoiceProcessingService {
 
     @Inject
     InvoiceUploadService uploadHelper; // Handles the S3/Cloud storage
-
+    @Inject
+    InvoiceReturnService invoiceReturnService;
     @Inject
     InvoiceExtractor extractor;
     // LangChain4j AI interface
@@ -133,16 +135,22 @@ public class InvoiceProcessingService {
                 .toList();
     }
 
-    //  calculate total spending in a specific month
+    /* calculate total spending in a specific month
+    using the stream and the lambda and the Method references
+     */
     public java.math.BigDecimal calculateMonthlySpending(int year, int month) {
-        return repository.findAll().stream()
+        try {
+            return repository.findAll().stream()
                 .filter(inv -> inv.getInvoiceDate() != null &&
                         inv.getInvoiceDate().getYear() == year &&
                         inv.getInvoiceDate().getMonthValue() == month)
                 .map(InvoiceEntity::getTotalAmount)
                 .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+        } catch (Exception e) {
+            LOG.error("Error calculating monthly total: " + e.getMessage());
+            return BigDecimal.ZERO;
+        }
     }
-
     // --- READ (Find by ID) ---
     public InvoiceEntity getInvoiceById(UUID id) {
         return repository.findById(id)

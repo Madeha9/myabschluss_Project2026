@@ -1,59 +1,32 @@
-package at.madeha.intelliinvoice.service;
+package at.madeha.intelliinvoice.service; // Make sure your package is correct
 
+import at.madeha.intelliinvoice.business.InvoiceStatus;
 import at.madeha.intelliinvoice.database.InvoiceEntity;
+import at.madeha.intelliinvoice.service.helper.ReturnStatusInfo;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import org.jboss.logging.Logger;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
-@ApplicationScoped
+@ApplicationScoped // This tells Quarkus this is a Service, not a standalone program
 public class InvoiceReturnService {
-    private static final Logger LOG = Logger.getLogger(InvoiceReturnService.class);
 
-    @Inject
-    private EntityManager em;
-
-    // Check return days and return message
-    public String checkReturnDays(InvoiceEntity invoice) {
-        Integer returnDays = invoice.getReturnDays();
-        if (returnDays == null) {
-            return "There is no return policy for this invoice.";
+    public ReturnStatusInfo getReturnStatusUpdate(InvoiceEntity invoice) {
+        if (invoice.getReturnDays() == null || invoice.getInvoiceDate() == null) {
+            return new ReturnStatusInfo(InvoiceStatus.NON_RETURNABLE, 0);
         }
 
         long daysElapsed = ChronoUnit.DAYS.between(invoice.getInvoiceDate(), LocalDate.now());
-        long daysLeft = returnDays - daysElapsed;
+        long daysLeft = invoice.getReturnDays() - daysElapsed;
 
+        InvoiceStatus currentStatus;
         if (daysLeft > 0) {
-            return "You can return this invoice within " + daysLeft + " day(s).";
+            currentStatus = InvoiceStatus.RETURNABLE;
         } else {
-            return "This invoice is no longer returnable.";
+            currentStatus = InvoiceStatus.NON_RETURNABLE;
+            daysLeft = 0;
         }
-    }
 
-    // Calculate total for a given month
-    public BigDecimal calculateMonthlyTotal(int year, int month) {
-        try {
-            List<InvoiceEntity> invoices = em.createQuery(
-                            "SELECT i FROM InvoiceEntity i WHERE YEAR(i.invoiceDate) = :year AND MONTH(i.invoiceDate) = :month",
-                            InvoiceEntity.class)
-                    .setParameter("year", year)
-                    .setParameter("month", month)
-                    .getResultList();
-
-            BigDecimal total = BigDecimal.ZERO;
-            for (InvoiceEntity invoice : invoices) {
-                total = total.add(invoice.getTotalAmount());
-            }
-            return total;
-
-        } catch (Exception e) {
-            LOG.error("Error calculating monthly total: " + e.getMessage());
-            return BigDecimal.ZERO;
-        }
+        return new ReturnStatusInfo(currentStatus, daysLeft);
     }
 }
