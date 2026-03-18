@@ -38,6 +38,7 @@
 package at.madeha.intelliinvoice.restapi;
 
 import at.madeha.intelliinvoice.database.InvoiceEntity;
+import at.madeha.intelliinvoice.exception.InvoiceValidationException;
 import at.madeha.intelliinvoice.service.InvoiceProcessingService;
 import at.madeha.intelliinvoice.service.InvoiceReturnService;
 import jakarta.inject.Inject;
@@ -47,6 +48,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Path("/myinvoices")
@@ -99,7 +101,7 @@ public class InvoiceController {
     public Response updateInvoice(InvoiceEntity invoice) {
         try {
             // This calls the updateInvoice method we just added to the service
-            InvoiceEntity updated = invoiceService.updateInvoice(invoice);
+            Optional<InvoiceEntity> updated = invoiceService.updateInvoice(invoice);
             return Response.ok(updated).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
@@ -114,10 +116,17 @@ public class InvoiceController {
         try {
             // Calls the deleteInvoiceById we added to the service
             invoiceService.deleteInvoiceById(id);
-            return Response.noContent().build(); // 204 No Content is standard for successful delete
-        } catch (RuntimeException e) {
+            return Response.ok(Map.of(
+                    "message", "Invoice " + id + " has been deleted successfully",
+                    "status", "DELETED"
+            )).build();
+        } catch (InvoiceValidationException e) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage()).build();
+                    .entity(Map.of("code", e.getErrorCode(), "message", e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            // General net for things like database crashes
+            return Response.status(500).entity("An unexpected error occurred: " + e.getMessage()).build();
         }
     }
 

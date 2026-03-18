@@ -20,14 +20,15 @@ public class Invoice {
     private String imageUrl;
     private Integer returnDays;
     private InvoiceStatus status;
+    private BigDecimal vatAmount;
+    private Integer invoiceNumber;
     private List<InvoiceItem> items;
 
     // Constructors
     public Invoice() {
     }
-
     public Invoice(UUID id, LocalDate invoiceDate, String storeName,
-                   BigDecimal totalAmount, String currency, InvoiceStatus status,
+                   BigDecimal totalAmount, String currency, InvoiceStatus status, BigDecimal vatAmount, Integer invoiceNumber,
                    String imageUrl, Integer returnDays, List<InvoiceItem> items) {
         this.id = id;
         this.invoiceDate = invoiceDate;
@@ -38,8 +39,25 @@ public class Invoice {
         this.returnDays = returnDays;
         this.items = items;
         this.status = status;
+        this.vatAmount = vatAmount;
+        this.invoiceNumber = invoiceNumber;
     }
 
+    public BigDecimal getVatAmount() {
+        return vatAmount;
+    }
+
+    public void setVatAmount(BigDecimal vatAmount) {
+        this.vatAmount = vatAmount;
+    }
+
+    public Integer getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(Integer invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
     // Getters and Setters
     public UUID getId() {
         return id;

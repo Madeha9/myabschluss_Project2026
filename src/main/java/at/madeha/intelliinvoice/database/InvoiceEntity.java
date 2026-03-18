@@ -57,6 +57,10 @@ public class InvoiceEntity {
      */
     @Column(name = "invoice_status")
     private InvoiceStatus status = InvoiceStatus.RETURNABLE;
+    @Column(name = "vat_Amount")
+    private BigDecimal vatAmount;
+    @Column(name = "invoice_Number")
+    private Integer invoiceNumber;
     // we set it to the default then will be changed according to the condiations in the ReturnService class
     @JsonManagedReference  //to avoid the infinite loop
     @OneToMany(
@@ -71,11 +75,7 @@ public class InvoiceEntity {
     // Constructors
     public InvoiceEntity() {
     }
-    /*
-     @Enumerated(EnumType.STRING)
-       @Column(name = "status")
-    private InvoiceStatus status;
-     */
+
 
     // Getters and Setters
 
@@ -157,5 +157,21 @@ public class InvoiceEntity {
 
     public void setItems(List<InvoiceItemEntity> items) {
         this.items = items;
+    }
+
+    public BigDecimal getVatAmount() {
+        return vatAmount;
+    }
+
+    public void setVatAmount(BigDecimal vatAmount) {
+        this.vatAmount = vatAmount;
+    }
+
+    public Integer getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(Integer invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 }
