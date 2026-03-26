@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
 
 public class S3ConnectionTest {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         S3Client s3 = S3ClientConfig.createS3Client();
 
