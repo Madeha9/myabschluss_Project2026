@@ -1,9 +1,10 @@
-# myabschlussabproject
+# IntelliInvoice
 
-## Overview
+> A modern, full-stack billing and invoice management system.
 
-This is a Java training project demonstrating software development best practices, including proper project structure,
-documentation, and development workflows.
+##  Overview
+
+IntelliInvoice is a comprehensive Java training project designed to showcase professional software development workflows. It features a **Quarkus** backend and an **Angular Material 3** frontend, utilizing a Maven multi-module architecture.
 
 ## Quickstart
 
