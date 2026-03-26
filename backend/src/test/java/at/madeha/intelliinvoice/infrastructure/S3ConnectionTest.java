@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
 
 public class S3ConnectionTest {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         // Read credentials from environment variables
         String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
