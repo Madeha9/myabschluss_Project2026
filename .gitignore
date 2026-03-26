@@ -96,4 +96,4 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 /Copy_Textfile1.txt
 
-src/main/resources/application.properties
+backend/src/main/resources/application.properties
