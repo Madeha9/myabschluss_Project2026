@@ -97,3 +97,7 @@ nb-configuration.xml
 /Copy_Textfile1.txt
 
 backend/src/main/resources/application.properties
+.postman/
+postman/
+# Ignore the built frontend files inside the backend
+backend/src/main/resources/META-INF/resources/

@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$rose-palette,
+    ),
+    typography: (
+      brand-family: 'Roboto',
+      plain-family: 'Roboto',
+    ),
+    density: 0,
+  ));
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  background: #fdf5f8;
+}
