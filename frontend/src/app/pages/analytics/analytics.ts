@@ -1,13 +1,16 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { InvoiceService } from '../../services/invoice.service';
-import { InvoiceResponseDTO, MonthlySpending } from '../../models/invoice.model';
+import {AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {InvoiceService} from '../../services/invoice.service';
+import {InvoiceResponseDTO, MonthlySpending} from '../../models/invoice.model';
+import {Chart, registerables} from 'chart.js';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-analytics',
@@ -34,7 +37,7 @@ import { InvoiceResponseDTO, MonthlySpending } from '../../models/invoice.model'
         </mat-select>
       </mat-form-field>
 
-      <button mat-flat-button color="primary" (click)="load()">Apply</button>
+      <button mat-flat-button color="primary" (click)="onApply()">Apply</button>
     </div>
 
     <!-- Metric cards -->
@@ -53,93 +56,304 @@ import { InvoiceResponseDTO, MonthlySpending } from '../../models/invoice.model'
       </mat-card>
     </div>
 
+    <!-- Monthly chart -->
+    <mat-card style="margin-bottom:16px;">
+      <mat-card-header>
+        <mat-card-title>Monthly spending — {{ selectedYear }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="legend-row">
+          <ng-container *ngFor="let m of months; let i = index">
+            <span class="legend-item" *ngIf="sumForMonth(i+1) > 0">
+              <span class="legend-dot" [style.background]="monthColors[i]"></span>
+              {{ m }} € {{ sumForMonth(i + 1) | number:'1.0-0' }}
+            </span>
+          </ng-container>
+        </div>
+        <div style="position:relative; width:100%; height:260px;">
+          <canvas #monthlyChart></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quarter + store charts -->
     <div class="charts-grid">
-      <!-- Monthly bar chart -->
       <mat-card>
-        <mat-card-header><mat-card-title>Monthly spending — {{ selectedYear }}</mat-card-title></mat-card-header>
+        <mat-card-header>
+          <mat-card-title>Spending by quarter</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
-          <div class="bar-chart">
-            <div *ngFor="let m of monthlyBars(); let i = index" class="bar-group">
-              <div class="bar-value" *ngIf="m.value > 0">{{ m.value | number:'1.0-0' }}</div>
-              <div class="bar-wrap">
-                <div class="bar" [style.height]="m.height + 'px'"
-                     [class.bar-current]="i + 1 === selectedMonth"
-                     [class.bar-empty]="m.value === 0"></div>
-              </div>
-              <div class="bar-label">{{ m.label }}</div>
-            </div>
+          <div style="position:relative; width:100%; height:240px;">
+            <canvas #quarterChart></canvas>
           </div>
         </mat-card-content>
       </mat-card>
 
-      <!-- Top stores -->
       <mat-card>
-        <mat-card-header><mat-card-title>Top stores</mat-card-title></mat-card-header>
+        <mat-card-header>
+          <mat-card-title>Top stores</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
-          <div *ngFor="let store of topStores()" class="store-row">
-            <span class="store-name">{{ store.name }}</span>
-            <div class="store-bar-bg">
-              <div class="store-bar-fill" [style.width]="store.pct + '%'"></div>
-            </div>
-            <span class="store-amount">{{ store.total | number:'1.2-2' }} €</span>
+          <div style="position:relative; width:100%; height:240px;">
+            <canvas #storeChart></canvas>
           </div>
-          <div *ngIf="topStores().length === 0" class="empty">No data for this period</div>
         </mat-card-content>
       </mat-card>
     </div>
   `,
   styles: [`
-    .page-title { font-size:22px; font-weight:500; margin-bottom:20px; }
+    .page-title {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #880e4f;
+    }
     .filter-row { display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
     .metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
-    .metric-card { padding:14px 16px !important; }
-    .metric-label { font-size:12px; color:#666; margin-bottom:4px; }
-    .metric-value { font-size:24px; font-weight:500; }
+
+    .metric-card {
+      padding: 14px 16px !important;
+      border: 0.5px solid #f8bbd0 !important;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: #880e4f;
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 500;
+      color: #880e4f;
+    }
     .charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .bar-chart { display:flex; align-items:flex-end; gap:6px; height:160px; padding:8px 0 0; }
-    .bar-group { display:flex; flex-direction:column; align-items:center; flex:1; gap:4px; }
-    .bar-wrap { display:flex; align-items:flex-end; height:120px; }
-    .bar { width:100%; border-radius:4px 4px 0 0; background:#90caf9; min-height:4px; transition:height 0.3s; }
-    .bar-current { background:#1565c0; }
-    .bar-empty { background:#e0e0e0; }
-    .bar-label { font-size:10px; color:#888; }
-    .bar-value { font-size:10px; color:#666; }
-    .store-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:13px; }
-    .store-row:last-child { border-bottom:none; }
-    .store-name { width:90px; color:#666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .store-bar-bg { flex:1; height:6px; background:#e0e0e0; border-radius:4px; overflow:hidden; }
-    .store-bar-fill { height:100%; background:#1565c0; border-radius:4px; }
-    .store-amount { font-weight:500; min-width:80px; text-align:right; }
-    .empty { color:#bdbdbd; text-align:center; padding:20px; }
+
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-top: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #880e4f;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
   `]
 })
-export class AnalyticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('monthlyChart') monthlyChartRef!: ElementRef;
+  @ViewChild('quarterChart') quarterChartRef!: ElementRef;
+  @ViewChild('storeChart') storeChartRef!: ElementRef;
+  monthColors = [
+    '#E91E63', '#9C27B0', '#3F51B5', '#2196F3',
+    '#00BCD4', '#4CAF50', '#8BC34A', '#FFEB3B',
+    '#FF9800', '#FF5722', '#795548', '#607D8B'
+  ];
+  private monthlyChartInstance: Chart | null = null;
+  private quarterChartInstance: Chart | null = null;
+
   spending = signal<MonthlySpending | null>(null);
   allInvoices = signal<InvoiceResponseDTO[]>([]);
+
   selectedYear = new Date().getFullYear();
   selectedMonth = new Date().getMonth() + 1;
 
   years = [2026, 2025, 2024];
   months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  private storeChartInstance: Chart | null = null;
 
   constructor(private svc: InvoiceService) {}
 
   ngOnInit() {
-    this.svc.getAll().subscribe(data => { this.allInvoices.set(data); this.load(); });
+    this.svc.getAll().subscribe(data => {
+      this.allInvoices.set(data);
+      this.load();
+    });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.buildCharts(), 100);
+  }
+
+  onApply() {
+    this.load();
   }
 
   load() {
     if (this.selectedMonth > 0) {
       this.svc.getMonthlySpending(this.selectedYear, this.selectedMonth)
-        .subscribe(data => this.spending.set(data));
+        .subscribe(data => {
+          this.spending.set(data);
+          setTimeout(() => this.buildCharts(), 0);
+        });
+    } else {
+      setTimeout(() => this.buildCharts(), 0);
     }
+  }
+
+  buildCharts() {
+    const vals = this.months.map((_, i) => this.sumForMonth(i + 1));
+    const maxVal = Math.max(...vals, 1);
+
+    this.monthlyChartInstance?.destroy();
+    this.quarterChartInstance?.destroy();
+    this.storeChartInstance?.destroy();
+
+    // monthly bar chart — each month its own colour
+    this.monthlyChartInstance = new Chart(
+      this.monthlyChartRef.nativeElement, {
+        type: 'bar',
+        data: {
+          labels: this.months,
+          datasets: [{
+            data: vals,
+            backgroundColor: this.monthColors,
+            borderRadius: 6,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {display: false},
+            tooltip: {
+              callbacks: {
+                label: (ctx: any) => ctx.raw > 0
+                  ? '€ ' + ctx.raw.toLocaleString()
+                  : 'No data'
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {display: false},
+              ticks: {
+                color: '#ad6f87',
+                font: {size: 11},
+                autoSkip: false
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {color: 'rgba(233,30,99,0.08)'},
+              ticks: {
+                color: '#ad6f87',
+                font: {size: 11},
+                callback: (v: any) => '€' + (v / 1000).toFixed(0) + 'k'
+              }
+            }
+          }
+        }
+      });
+
+    // quarter donut chart
+    this.quarterChartInstance = new Chart(
+      this.quarterChartRef.nativeElement, {
+        type: 'doughnut',
+        data: {
+          labels: ['Q1 (Jan–Mar)', 'Q2 (Apr–Jun)', 'Q3 (Jul–Sep)', 'Q4 (Oct–Dec)'],
+          datasets: [{
+            data: [
+              vals.slice(0, 3).reduce((a, b) => a + b, 0),
+              vals.slice(3, 6).reduce((a, b) => a + b, 0),
+              vals.slice(6, 9).reduce((a, b) => a + b, 0),
+              vals.slice(9, 12).reduce((a, b) => a + b, 0),
+            ],
+            backgroundColor: ['#E91E63', '#9C27B0', '#3F51B5', '#2196F3'],
+            borderWidth: 0,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '60%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#880e4f',
+                boxWidth: 10,
+                font: {size: 11},
+                padding: 8
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx: any) => ctx.label + ': € ' + ctx.raw.toLocaleString()
+              }
+            }
+          }
+        }
+      });
+
+    // top stores horizontal bar chart
+    const stores = this.topStores();
+    this.storeChartInstance = new Chart(
+      this.storeChartRef.nativeElement, {
+        type: 'bar',
+        data: {
+          labels: stores.map(s => s.name),
+          datasets: [{
+            data: stores.map(s => s.total),
+            backgroundColor: ['#E91E63', '#9C27B0', '#FF9800', '#4CAF50', '#607D8B'],
+            borderRadius: 4,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          indexAxis: 'y' as const,
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {display: false},
+            tooltip: {
+              callbacks: {
+                label: (ctx: any) => '€ ' + ctx.raw.toLocaleString()
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {color: 'rgba(233,30,99,0.08)'},
+              ticks: {
+                color: '#ad6f87',
+                font: {size: 10},
+                callback: (v: any) => '€' + v
+              }
+            },
+            y: {
+              grid: {display: false},
+              ticks: {color: '#880e4f', font: {size: 11}}
+            }
+          }
+        }
+      });
   }
 
   invoicesInPeriod() {
     return this.allInvoices().filter(i => {
       const d = new Date(i.invoiceDate);
       const yearOk = d.getFullYear() === this.selectedYear;
-      return this.selectedMonth === 0 ? yearOk : yearOk && (d.getMonth() + 1) === this.selectedMonth;
+      return this.selectedMonth === 0
+        ? yearOk
+        : yearOk && (d.getMonth() + 1) === this.selectedMonth;
     });
   }
 
@@ -149,19 +363,12 @@ export class AnalyticsComponent implements OnInit {
     return inv.reduce((sum, i) => sum + i.totalAmount, 0) / inv.length;
   }
 
-  monthlyBars() {
-    const maxVal = Math.max(...this.months.map((_, i) => this.sumForMonth(i + 1)), 1);
-    return this.months.map((label, i) => {
-      const value = this.sumForMonth(i + 1);
-      return { label, value, height: Math.round((value / maxVal) * 110) };
-    });
-  }
-
   sumForMonth(month: number): number {
     return this.allInvoices()
       .filter(i => {
         const d = new Date(i.invoiceDate);
-        return d.getFullYear() === this.selectedYear && (d.getMonth() + 1) === month;
+        return d.getFullYear() === this.selectedYear
+          && (d.getMonth() + 1) === month;
       })
       .reduce((sum, i) => sum + i.totalAmount, 0);
   }
@@ -175,6 +382,10 @@ export class AnalyticsComponent implements OnInit {
     return Array.from(map.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
-      .map(([name, total]) => ({ name, total, pct: Math.round((total / max) * 100) }));
+      .map(([name, total]) => ({
+        name,
+        total,
+        pct: Math.round((total / max) * 100)
+      }));
   }
 }

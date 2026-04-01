@@ -1,38 +1,5 @@
 package at.madeha.intelliinvoice.restapi;
 
-//
-/// *
-// * endpoint: download/upload the Invoice file talks to Stoarge store teh file  and to the LLM to send the file for processing
-// * UploadController handles the upload request , upload the file Invoice image and pass it to the LLM/Stoarge
-// * connection to the service layer and implement the endpoint
-// * need to  use the storage service and processing service  , so that can store and process the invoice
-// * inject the class means , instead of creating the instant  by myself, the framework do that for me, @inject invoiceproccservice
-// * instead of writing something like PostprocessingService invc  = new  invoicerproceetime() each time ,
-// * the framework creates once and could be used many times ,which makes the code cleaner
-// *  that calls (dependency injection ) in quarkus
-// */
-
-//public class UploadController {
-//   /*we use the interface instead of the class to avoid the full dependency on the class , if we change the
-//   CloudStorage class , we do not have to change the controller , because we do not  use
-//   the class , we are using the interface
-//    */
-//   //we call the invoiceProcessingService so that he saved the file to the cloud and return the url
-//    @Inject
-//   InvoiceProcessingService invoiceProcessingService; // The service that saves to DB
-//    @POST
-//   /*
-//   we use POSt Https request to create or send file to the server
-//    */
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    //tells the API that will recieve upload file that is multipart form data
-//    @Produces(MediaType.APPLICATION_JSON)
-//    //the API return a JSON file
-//   /*FileUpload is a class in Quarkus RESt API to handle file upload in the rest API
-//   contains information related to the file like file name, size, path etc
-//    */
-
-
 import at.madeha.intelliinvoice.database.InvoiceEntity;
 import at.madeha.intelliinvoice.exception.InvoiceValidationException;
 import at.madeha.intelliinvoice.service.InvoiceProcessingService;
@@ -50,25 +17,37 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Map;
 
+/**
+ * High-speed entry point for file uploads.
+ * This controller manages the complex "Multipart" handshake required to
+ * move a physical file from the user's computer to our server.
+ */
 @Path("/UploadInvoice")
 public class UploadController {
-
+    /**
+     * Framework-managed injection.
+     * We delegate to the Service layer to keep this Controller
+     * "thin" and focused only on handling the HTTP request/response.
+     */
     @Inject
-    InvoiceProcessingService invoiceProcessingService; // Framework handles this!
+    InvoiceProcessingService invoiceProcessingService;
 
+    /**
+     * Receives a file, converts it to a stream, and triggers the AI pipeline.
+     * Multipart/form-data allows us to stream the actual file bytes.
+     * * @param file The uploaded file wrapped in a Quarkus FileUpload object.
+     * @return A JSON response containing the AI-extracted invoice data.
+     */
     @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces("application/json") // This is the same as MediaType.APPLICATION_JSON
+    @Consumes(MediaType.MULTIPART_FORM_DATA) //tells the API that will receive upload file as multipart form data
+    @Produces("application/json")
     public Response uploadInvoice(@RestForm("uploadInvoice") FileUpload file) {
+        //FileUpload is a class in Quarkus RESt API to handle file upload in the rest API Info file name, size, path etc
         try {
-            // file.fileName() gets the real name (e.g., "receipt.jpg")
-            // file.contentType() gets the type (e.g., "image/jpeg")
-            // file.filePath() gives the path to the temp file
-
-            InputStream is = Files.newInputStream(file.filePath());
-
+// Converts the temporary file path into a stream for processing
+            InputStream inputStream = Files.newInputStream(file.filePath());
             InvoiceEntity savedInvoice = invoiceProcessingService.processUploadedInvoice(
-                    is,
+                    inputStream,
                     file.fileName(), file.contentType()
             );
 
@@ -84,7 +63,6 @@ public class UploadController {
                     "details", e.getMessage()
             )).build();
         } catch (Exception e) {
-            // This is for  safety net for unexpected crashes
             return Response.status(500).entity(Map.of(
                     "errorType", "UNKNOWN_ERROR",
                     "details", "Something went wrong on the server."
@@ -92,6 +70,5 @@ public class UploadController {
         }
 
     }
-
 }
 

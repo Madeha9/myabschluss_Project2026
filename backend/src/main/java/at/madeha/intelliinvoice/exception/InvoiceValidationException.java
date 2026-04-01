@@ -1,26 +1,40 @@
 package at.madeha.intelliinvoice.exception;
-/*
-this is a custom error class that will handle the errors and the exceptions in the  project using a enum class
+
+/**
+ * Custom Exception for validation and business logic errors related to Invoices.
+ * This class is flexible: it can hold different {@link ErrorCode} values depending on the failure.
  */
+
 public class InvoiceValidationException extends RuntimeException {
     private final ErrorCode errorCode;
-    /*errorCode is final which means we need to  assign the value in constructor directly or giving it a value , and also
-    the value can not be changed
+
+    /* * The ErrorCode is final, meaning it must be assigned in the constructor
+     * and cannot be changed once the exception is created.
      */
 
-
-    // Standard constructor with code and message, in order to assign  the value of the error code
+    /**
+     * Standard constructor to assign a specific ErrorCode and a descriptive message.
+     *
+     * @param errorCode The category of the error from our Enum.
+     * @param message   Detailed explanation of what failed.
+     */
     public InvoiceValidationException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    // Constructor for when another exception (cause) triggered this one
+    /**
+     * Constructor for when another technical exception (the 'cause') triggered this validation error.
+     * @param errorCode The category of the error.
+     * @param message Detailed explanation.
+     * @param cause The original exception that was caught.
+     */
     public InvoiceValidationException(ErrorCode errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
     }
 
+    /** @return the specific ErrorCode assigned to this validation failure. */
     public ErrorCode getErrorCode() {
         return errorCode;
     }

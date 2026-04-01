@@ -4,8 +4,12 @@ import at.madeha.intelliinvoice.database.InvoiceItemEntity;
 
 import java.util.List;
 
-/*
-This is DTO , data transfer object ,is a Class only to format the data for thr GUI.
+/**
+ * Data Transfer Object (DTO) designed specifically for the Frontend GUI.
+ *  We use this DTO to decouple our Database Schema from the API.
+ * It allows us to merge raw Invoice data with calculated "Return Status" logic
+ * (like daysLeft) into a single JSON object that the Angular frontend can
+ * easily display without doing its own complex calculations.
  */
 public class InvoiceResponseDTO {
     public String imageUrl;
@@ -20,8 +24,10 @@ public class InvoiceResponseDTO {
     public Integer invoiceNumber;
     public List<InvoiceItemEntity> items;
 
-
-    // Constructor that takes the Entity and the Status Record
+    /**
+     * Maps a Database Entity and calculated Return Status into a flat
+     * structure ready for JSON serialization.
+     */
     public InvoiceResponseDTO(at.madeha.intelliinvoice.database.InvoiceEntity entity,
                               at.madeha.intelliinvoice.service.helper.ReturnStatusInfo info) {
         this.id = entity.getId();

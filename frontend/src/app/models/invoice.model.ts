@@ -1,5 +1,12 @@
+/** * Frontend data blueprints.
+ * These interfaces act as a "Contract" to ensure the Angular UI
+ * matches the JSON data coming from the Java Backend exactly.
+ */
+
+/** Defines the three possible return states for an invoice. */
 export type InvoiceStatus = 'RETURNABLE' | 'NON_RETURNABLE' | 'SATISFIED';
 
+/** Represents a single row/item found on a receipt. */
 export interface InvoiceItem {
   id?: string;
   description: string;
@@ -8,6 +15,7 @@ export interface InvoiceItem {
   lineTotal: number;
 }
 
+/** The main data model for a processed invoice, including AI and return data. */
 export interface Invoice {
   id: string;
   storeName: string;
@@ -23,6 +31,7 @@ export interface Invoice {
   items: InvoiceItem[];
 }
 
+/** The specific Data Transfer Object (DTO) received from the API after an upload. */
 export interface InvoiceResponseDTO {
   id: string;
   storeName: string;
@@ -38,12 +47,14 @@ export interface InvoiceResponseDTO {
 
 }
 
+/** Simple container for the spending dashboard charts. */
 export interface MonthlySpending {
   year: number;
   month: number;
   totalSpending: number;
 }
 
+/** Wrapper for the standard API response after a successful file upload. */
 export interface UploadResponse {
   message: string;
   status: string;
