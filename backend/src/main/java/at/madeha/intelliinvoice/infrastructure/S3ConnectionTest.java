@@ -1,7 +1,12 @@
 package at.madeha.intelliinvoice.infrastructure;
-
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+
+/**
+ * CONNECTION TEST: A simple main class to verify the AWS S3 connection.
+ * Used at the very beginning of the project to ensure API keys and
+ * regions are configured correctly before building the main logic.
+ */
 
 public class S3ConnectionTest {
 

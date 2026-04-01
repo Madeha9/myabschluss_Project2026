@@ -1,32 +1,57 @@
 package at.madeha.intelliinvoice.business;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-/*
-represents the   as a plain Java object (without JPA) database and the framework
-* DTO  data transform object, we used in the LLm so that we can get a java object instead of getting JSON file , so that  llm
-will match the entity and return a java object instead of JSON file
+/**
+ * Represents a plain Java object (POJO) used as a Data Transfer Object (DTO)
+ * * This class is used to map extracted data from the LLM into a structured format
+ * before it is converted into a database entity. It decoupled the AI extraction
+ * logic from the persistence layer.
+ * This class serves as a temporary data holder before persistence.
  */
 public class Invoice {
-
+    /**
+     * Unique identifier for the invoice instance automatically generated in the database .
+     */
     private UUID id;
+    /** The date the invoice was issued  AI returns it  */
     private LocalDate invoiceDate;
     private String storeName;
     private BigDecimal totalAmount;
     private String currency;
+    /** The link to the stored image of the original invoice in the cloud. */
     private String imageUrl;
+    /** Maximum days allowed for a return per store policy. */
     private Integer returnDays;
     private InvoiceStatus status;
     private BigDecimal vatAmount;
     private Integer invoiceNumber;
     private List<InvoiceItem> items;
 
-    // Constructors
+
+    /**
+     * Default constructor required for JSON mapping and frameworks.
+     */
     public Invoice() {
     }
+
+    /**
+     * Full constructor for manual initialization of all invoice fields.
+     *      * @param id             the unique identifier for this invoice instance
+     *      * @param invoiceDate    the date printed on the physical receipt
+     *      * @param storeName      the name of the  shop
+     *      * @param totalAmount    the final price including all taxes
+     *      * @param currency       the currency code used (e.g., EUR, USD)
+     *      * @param status         the initial return eligibility status
+     *      * @param vatAmount      the value-added tax amount identified by the AI
+     *      * @param invoiceNumber  the reference or receipt number from the paper
+     *      * @param imageUrl        The link to the stored image of the original invoice in the cloud.
+     *      * @param returnDays     the total days allowed for a return
+     *      * @param items          the list of individual products found on the receipt
+     *      */
+
     public Invoice(UUID id, LocalDate invoiceDate, String storeName,
                    BigDecimal totalAmount, String currency, InvoiceStatus status, BigDecimal vatAmount, Integer invoiceNumber,
                    String imageUrl, Integer returnDays, List<InvoiceItem> items) {
@@ -43,6 +68,9 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
+    /**
+     * Getter and Setter
+     */
     public BigDecimal getVatAmount() {
         return vatAmount;
     }
@@ -58,7 +86,6 @@ public class Invoice {
     public void setInvoiceNumber(Integer invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
-    // Getters and Setters
     public UUID getId() {
         return id;
     }

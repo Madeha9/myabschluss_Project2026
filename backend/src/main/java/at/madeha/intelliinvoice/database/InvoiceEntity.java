@@ -1,7 +1,4 @@
 package at.madeha.intelliinvoice.database;
-/*
-map the objects to the database , coupled with the framework
- */
 
 import at.madeha.intelliinvoice.business.InvoiceStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -13,15 +10,20 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+/**
+ * Database Entity representing the 'invoice' table.
+ * Maps the application objects to the persistence layer using JPA/Hibernate.
+ */
 @Entity
 @Table(name = "invoice")
 public class InvoiceEntity {
     /*
-    ı have to write all the info by myself like the @column part then hibernate will only take care of  creating the table in the
-    database
-     */
-    @Id
-    @GeneratedValue
+ı have to write all the info by myself like the @column part then hibernate will only take care of creating the table in the
+database
+*/
+    @Id // Tells Hibernate this is a primary key of the table
+    @GeneratedValue  // The ID should be generated automatically
     private UUID id;
 
     @Column(name = "invoice_date")
@@ -35,7 +37,9 @@ public class InvoiceEntity {
 
     @Column(name = "currency", length = 3)
     private String currency;
-
+    /**
+     * Stored as TEXT to accommodate long cloud storage URLs.
+     */
     @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
 
@@ -51,6 +55,9 @@ public class InvoiceEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+    /** * Ensures the enum is stored as a String (e.g., 'RETURNABLE') in the DB
+     * rather than an integer index.
+     */
     @Enumerated(EnumType.STRING)
     /* using the annotation enum so that java knows that is an enum will not try  to use a number in the
     field as a status
@@ -62,6 +69,11 @@ public class InvoiceEntity {
     @Column(name = "invoice_Number")
     private Integer invoiceNumber;
     // we set it to the default then will be changed according to the condiations in the ReturnService class
+    /**
+     * Relationship to individual line items.
+     * ManagedReference prevents infinite recursion during JSON serialization.
+     * CascadeType.ALL ensures items are saved/deleted along with the invoice.
+     */
     @JsonManagedReference  //to avoid the infinite loop
     @OneToMany(
             mappedBy = "invoice",
@@ -72,10 +84,10 @@ public class InvoiceEntity {
     )
     //this  to list the items of each invoice
     private List<InvoiceItemEntity> items = new ArrayList<>(); // changed to the array list to avoid the null pointer
-    // Constructors
+
+    // Constructor
     public InvoiceEntity() {
     }
-
 
     // Getters and Setters
 

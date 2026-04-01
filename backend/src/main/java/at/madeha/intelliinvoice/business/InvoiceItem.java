@@ -1,20 +1,33 @@
 package at.madeha.intelliinvoice.business;
-/*
-represents the invoice items for each invoice   as a plain Java object (without JPA) database and the framework
- */
-
 import java.math.BigDecimal;
 
+/**
+ * Represents an individual line item from an invoice.
+ * This POJO is used to capture specific product details extracted by the AI.
+ */
 public class InvoiceItem {
 
     private String description;
     private BigDecimal quantity;
     private BigDecimal unitPrice;
+    /**
+     * The total price for this line (quantity * unitPrice).
+     */
     private BigDecimal lineTotal;
 
-    // Constructors
+    /**
+     * Default constructor for framework (Quarkus) mapping.
+     */
     public InvoiceItem() {
     }
+
+    /**
+     * Full constructor for manual initialization.
+     * * @param description the name or detail of the product/service
+     * @param quantity    the number of units purchased
+     * @param unitPrice   the cost per single unit
+     * @param lineTotal   the calculated total for this specific line
+     */
 
     public InvoiceItem(String description, BigDecimal quantity,
                        BigDecimal unitPrice, BigDecimal lineTotal) {

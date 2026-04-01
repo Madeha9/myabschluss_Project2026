@@ -1,7 +1,7 @@
 package at.madeha.intelliinvoice.database;
 /*
-gives the  access to JPA annotations like @Entity , @Table etc.... without will not  work
-* related to framework and the database , to map the entity to the database
+gives the  access to JPA annotations like @Entity , @Table etc.... without  it will not  work
+related to framework and the database , to map the entity to the database
  */
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -10,12 +10,24 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * Entity class representing a single line item on an invoice.
+ * Maps the individual product details to the database persistence layer.
+ */
 @Entity
 @Table(name = "invoice_item")
 public class InvoiceItemEntity {
-    @Id //tells hibernate this is a primary key of the table
-    @GeneratedValue(strategy = GenerationType.UUID) //The ID should be generated automatically
+    /**
+     * Primary key: The ID is generated automatically as a UUID.
+     */
+    @Id
+    //tells hibernate this is a primary key of the table
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id; // Every invoice gets a unique identifier
+    /**
+     * Relationship to the parent invoice.
+     * Uses Lazy fetching to optimize performance.
+     */
     /*
     optional = false  each item must belong to an invoice , can not be without invoice
     fetch is to load the info of an invoice for the item , fetchtyope.lazy download the invoice for the item only when
@@ -29,7 +41,6 @@ public class InvoiceItemEntity {
      */
     @JoinColumn(name = "invoice_id", nullable = false)
     @JsonBackReference //to avoid the infinite loop between the item and the invoice
-
     //to connect the item to the invoice , a reference to the parent invoice class
     private InvoiceEntity invoice;
 
@@ -45,6 +56,10 @@ public class InvoiceItemEntity {
     @Column(name = "line_total", precision = 12, scale = 2)
     private BigDecimal lineTotal;
 
+    /**
+     *  Default Constructor because JPA (Hibernate) needs to be able to
+     *  create an object before it knows what data to put inside it.
+     */
     public InvoiceItemEntity() {
     }
 
