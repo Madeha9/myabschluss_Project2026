@@ -2,178 +2,72 @@
 
 ## Overview
 
-This document describes the test data used for testing the system.
+Test data for IntelliInvoice was collected from two sources:
+real invoice images downloaded from the internet for upload testing,
+and manually created data for database CRUD testing with JUnit.
 
-## Test Data Strategy
+---
 
-### Data Generation Approach
+## Test Data Set 1: Invoice Images (Upload Testing)
 
-- [Approach 1]
-- [Approach 2]
+**Purpose:** Test the full upload and AI extraction flow
+**Source:** Sample invoice images downloaded from the internet
+**Used in:** TC-F-001, TC-I-001, TC-S-001
 
-### Data Management
+| File                   | Format | Content             | Expected Result                     |
+|------------------------|--------|---------------------|-------------------------------------|
+| receipt_mediamarkt.jpg | JPG    | Electronics receipt | AI extracts store, date, total, VAT |
+| receipt_zara.png       | PNG    | Clothing receipt    | AI extracts store, date, total, VAT |
+| invoice_test.pdf       | PDF    | Standard invoice    | AI extracts all fields              |
+| blurry_image.jpg       | JPG    | Unreadable image    | INVALID_INVOICE_DATA error          |
+| document.txt           | TXT    | Text file           | INVALID_FILE_FORMAT error           |
 
-[Description of how test data is managed]
+---
 
-## Test Data Sets
+## Test Data Set 2: Database Test Data (JUnit)
 
-### Test Data Set 1: [Name]
+**Purpose:** Test InvoiceRepository CRUD operations
+**Source:** Manually created in JUnit test setup
+**Used in:** TC-D-001, TC-D-002, TC-D-003, TC-D-004
 
-**Purpose:** [Description of what this data set is used for]
-**Source:** [Where the data comes from]
-**Size:** [Number of records]
-
-**Data Structure:**
-
-```
+```json
 {
-  "field1": "value1",
-  "field2": "value2",
-  "field3": "value3"
+  "storeName": "MediaMarkt",
+  "invoiceDate": "2025-03-10",
+  "totalAmount": 249.90,
+  "vatAmount": 41.65,
+  "currency": "EUR",
+  "invoiceNumber": 1042,
+  "returnDays": 30,
+  "items": [
+    {
+      "description": "Laptop charger",
+      "quantity": 1,
+      "unitPrice": 208.25,
+      "lineTotal": 208.25
+    }
+  ]
 }
 ```
 
-**Sample Data:**
-| ID | Field1 | Field2 | Field3 | Description |
-|----|--------|--------|--------|-------------|
-| 1 | [Value] | [Value] | [Value] | [Description] |
-| 2 | [Value] | [Value] | [Value] | [Description] |
-| 3 | [Value] | [Value] | [Value] | [Description] |
-
-**Usage:**
-
-- [Test case 1]
-- [Test case 2]
-
-### Test Data Set 2: [Name]
-
-**Purpose:** [Description of what this data set is used for]
-**Source:** [Where the data comes from]
-**Size:** [Number of records]
-
-**Data Structure:**
-
-```
-{
-  "field1": "value1",
-  "field2": "value2"
-}
-```
-
-**Sample Data:**
-| ID | Field1 | Field2 | Description |
-|----|--------|--------|-------------|
-| 1 | [Value] | [Value] | [Description] |
-| 2 | [Value] | [Value] | [Description] |
-
-**Usage:**
-
-- [Test case 1]
-- [Test case 2]
-
-## Boundary Value Test Data
-
-### Boundary Test Set 1: [Field/Parameter Name]
-
-**Type:** [Numeric/String/Date/etc.]
-
-| Test Case   | Input Value | Expected Result | Notes              |
-|-------------|-------------|-----------------|--------------------|
-| Minimum - 1 | [Value]     | [Result]        | Below minimum      |
-| Minimum     | [Value]     | [Result]        | At minimum         |
-| Minimum + 1 | [Value]     | [Result]        | Just above minimum |
-| Maximum - 1 | [Value]     | [Result]        | Just below maximum |
-| Maximum     | [Value]     | [Result]        | At maximum         |
-| Maximum + 1 | [Value]     | [Result]        | Above maximum      |
+---
 
 ## Invalid Test Data
 
-### Invalid Data Set 1: [Name]
+| Test Case          | Input               | Expected Error        |
+|--------------------|---------------------|-----------------------|
+| Wrong file type    | document.txt        | INVALID_FILE_FORMAT   |
+| Blurry image       | unreadable.jpg      | INVALID_INVOICE_DATA  |
+| Math mismatch      | items + VAT ≠ total | INVALID_INVOICE_DATA  |
+| Invalid UUID       | random-string       | 404 INVOICE_NOT_FOUND |
+| Missing store name | storeName = null    | INVALID_INVOICE_DATA  |
 
-**Purpose:** Test error handling
+---
 
-| Test Case | Input           | Expected Error | Error Message |
-|-----------|-----------------|----------------|---------------|
-| [Case 1]  | [Invalid input] | [Error type]   | [Message]     |
-| [Case 2]  | [Invalid input] | [Error type]   | [Message]     |
+## Data Privacy
 
-## Special Test Data
-
-### Edge Cases
-
--
-
-[Edge case 1]: [Data]
--
-
-[Edge case 2]: [Data]
-
-### Null/Empty Values
-
--
-
-[Test scenario 1]: [Data]
--
-
-[Test scenario 2]: [Data]
-
-### Special Characters
-
--
-
-[Test scenario 1]: [Data]
--
-
-[Test scenario 2]: [Data]
-
-## Performance Test Data
-
-### Load Test Data
-
-**Volume:** [Number of records]
-**Characteristics:** [Description]
-
-### Stress Test Data
-
-**Volume:** [Number of records]
-**Characteristics:** [Description]
-
-## Test Data Refresh
-
-### Refresh Frequency
-
-[How often test data is refreshed]
-
-### Refresh Procedure
-
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
-
-## Data Privacy and Security
-
-### Sensitive Data Handling
-
-[How sensitive data is handled in testing]
-
-### Data Masking
-
-[Describe data masking approach]
-
-### Compliance
-
-[Relevant compliance requirements]
-
-## Test Data Storage
-
-### Location
-
-[Where test data is stored]
-
-### Access Control
-
-[Who has access to test data]
-
-### Backup
-
-[Test data backup strategy]
+- Invoice images downloaded from the internet contain no real
+  personal data
+- No real customer data or banking information was used
+- AWS credentials used only via environment variables —
+  never stored in test data or source code

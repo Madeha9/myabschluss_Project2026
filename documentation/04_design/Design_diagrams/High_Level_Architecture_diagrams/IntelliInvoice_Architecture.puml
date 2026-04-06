@@ -1,0 +1,121 @@
+@startuml IntelliInvoice_Architecture
+
+' --- Color Customization ---
+skinparam backgroundColor #fdf5f8
+skinparam componentStyle rectangle
+skinparam RoundCorner 15
+skinparam Shadowing true
+skinparam defaultFontColor #000000
+
+' Presentation Layer (Pink) - User Request
+skinparam rectangle<<frontend>> {
+    BackgroundColor #FCE4EC
+    BorderColor #880E4F
+}
+skinparam component<<frontend>> {
+    BackgroundColor #F8BBD0
+    BorderColor #880E4F
+}
+
+' Application Layer (Blue) - User Request
+skinparam rectangle<<backend>> {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+}
+skinparam component<<backend>> {
+    BackgroundColor #BBDEFB
+    BorderColor #1976D2
+}
+
+' Data Layer (Orange)
+skinparam rectangle<<data>> {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+}
+skinparam database {
+    BackgroundColor #FFE0B2
+    BorderColor #E65100
+}
+
+' External/Cloud (Purple)
+skinparam cloud {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+}
+
+' Global Styles
+skinparam arrow {
+    Color #455A64
+    Thickness 1.5
+    FontColor #000000
+}
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #BDBDBD
+}
+
+title IntelliInvoice — High-Level Architecture (Updated Colors)
+
+'--- FRONTEND ---
+rectangle "Presentation Layer\nAngular 21 (UI)" <<frontend>> as FRONTEND {
+    component "Angular Web Interface" as UI <<frontend>>
+}
+
+'--- BACKEND ---
+rectangle "Application Layer\nJava 21 + Quarkus 3.2.3" <<backend>> as BACKEND {
+    component "UploadController\nPOST /UploadInvoice" as CTRL_UPLOAD <<backend>>
+    component "InvoiceController\nGET PUT DELETE /myinvoices" as CTRL_INVOICE <<backend>>
+
+    component "InvoiceProcessingService" as SVC_PROCESSING <<backend>>
+    component "InvoiceReturnService" as SVC_RETURN <<backend>>
+    component "InvoiceValidationService" as SVC_VALIDATION <<backend>>
+
+    component "InvoiceRepository\n(JPA + Hibernate)" as REPO <<backend>>
+}
+
+'--- DATA LAYER ---
+rectangle "Data Layer" <<data>> as DATA {
+    database "PostgreSQL\ninvoice + invoice_item" as DB
+    cloud "AWS S3\neu-north-1" as S3
+}
+
+'--- EXTERNAL ---
+cloud "Anthropic API\nClaude Sonnet" as AI
+
+'--- CONNECTIONS ---
+UI --> CTRL_UPLOAD  : POST /UploadInvoice
+UI --> CTRL_INVOICE : GET PUT DELETE /myinvoices
+
+CTRL_UPLOAD  --> SVC_PROCESSING
+CTRL_INVOICE --> SVC_PROCESSING
+CTRL_INVOICE --> SVC_RETURN
+
+SVC_PROCESSING --> SVC_VALIDATION : validate
+SVC_PROCESSING --> SVC_RETURN     : return status
+
+SVC_PROCESSING --> REPO : save data
+REPO --> DB : JPA / Hibernate
+
+SVC_PROCESSING --> S3 : upload image
+SVC_PROCESSING --> AI : send S3 URL
+
+'--- NOTES ---
+note right of AI
+  LangChain4j integration
+  Model: claude-3-sonnet
+  Returns structured
+  Java Invoice object
+end note
+
+note right of DB
+  Tables:
+  - invoice
+  - invoice_item
+end note
+
+note bottom of S3
+  Stores original images.
+  URL saved in DB.
+end note
+
+@enduml

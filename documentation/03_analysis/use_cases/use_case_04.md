@@ -1,57 +1,38 @@
-# Use Case 04: View Return Reminders
+# Use Case 04: Search Invoice by Store Name
 
 ## Overview
 
-**ID:** UC-04  
-**Name:** View Return Reminders  
-**Primary Actor:** User  
-**Secondary Actors:** Backend API  
-**Brief Description:** The user views invoices that are close to their return deadline.
+**ID:** UC-04
+**Name:** Search Invoice by Store Name
+**Primary Actor:** User
+**Secondary Actors:** Quarkus Backend, PostgreSQL
+**Brief Description:** The user searches for invoices by typing
+a store name in the search field.
 
 ## Preconditions
 
-- Invoices contain invoice_date and return_window_days
-- Return deadline has been calculated
+- At least one invoice is saved in the database
+- User is on the Invoice List page
 
 ## Postconditions
 
-- User receives a list of invoices expiring within a defined time range
+- Filtered invoice list is displayed matching the search term
 
 ## Main Success Scenario
 
-1. User requests invoices nearing return deadline.
-2. System calculates remaining days until return deadline.
-3. System filters invoices within specified time frame (e.g., 7 days).
-4. System returns sorted list by nearest deadline.
-
-## Alternative Flows
-
-### Alternative Flow 1: No Expiring Invoices
-
-**Condition:** No invoices meet criteria
-
-1. System returns empty list.
-2. Use case ends successfully.
+1. User types a store name in the search field
+2. System calls GET /myinvoices/search?name=
+3. Backend filters invoices by store name (case insensitive)
+4. Angular UI updates the table with matching results
 
 ## Exception Flows
 
-### Exception Flow 1: Missing Return Data
+### Exception Flow 1: No Results Found
 
-**Condition:** Invoice lacks return policy information
+**Condition:** No invoice matches the search term
 
-1. System excludes invoice from reminder list.
-2. Use case continues.
-
-## Special Requirements
-
-- Accurate date calculation
-- Efficient filtering logic
+1. Angular UI displays "No invoices found"
 
 ## Frequency of Use
 
-Moderate (users check before return deadlines)
-
-## Open Issues
-
-- Default reminder time frame (e.g., 7 days?)
-- Future extension: automatic email reminders
+Occasional — when user is looking for a specific store

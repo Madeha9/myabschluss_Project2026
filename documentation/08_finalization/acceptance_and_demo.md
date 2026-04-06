@@ -2,279 +2,106 @@
 
 ## Demo Information
 
-**Date:** [YYYY-MM-DD]
-**Time:** [HH:MM - HH:MM]
-**Location:** [Location/Meeting link]
-**Presenter(s):** [Names]
+**Date:** 2026-04-10
+**Location:** WiFi Vienna
+**Presenter:** Madeha Mohammed
+**Audience:** Course trainer and evaluators
 
-## Attendees
-
-### Required Attendees
-
-- [ ] Product Owner: [Name]
-- [ ] Key Stakeholders: [Names]
-- [ ] Customer Representatives: [Names]
-
-### Optional Attendees
-
-- [ ] Development Team: [Names]
-- [ ] QA Team: [Names]
-- [ ] Support Team: [Names]
-
-### Actual Attendees
-
-[List of people who actually attended]
+---
 
 ## Demo Agenda
 
-### 1. Introduction (5 minutes)
+| # | Topic                                               | Time  |
+|---|-----------------------------------------------------|-------|
+| 1 | Project introduction and architecture overview      | 5 min |
+| 2 | Upload invoice — AI extraction live demo            | 5 min |
+| 3 | Invoice list — search, filter, thumbnails           | 5 min |
+| 4 | Invoice detail — return deadline and original image | 5 min |
+| 5 | Spending analytics — charts and filters             | 5 min |
+| 6 | Q&A                                                 | 5 min |
 
-- Project overview
-- Demo objectives
-- Agenda overview
+**Total: ~30 minutes**
 
-### 2. Feature Demonstrations (30-45 minutes)
+---
 
-#### Feature 1: [Feature Name]
+## Demo Script
 
-**Time Allocated:** [Minutes]
-**Presenter:** [Name]
-**Demo Script:**
+### Step 1 — Upload Invoice
 
-1. [Demo step 1]
-2. [Demo step 2]
-3. [Demo step 3]
+1. Navigate to the Upload page
+2. Drag and drop a real invoice image (JPG)
+3. Click "Process invoice"
+4. Show AI extracting store name, date, total, VAT, line items
+5. Confirm and save
+6. **Key point:** Zero manual data entry — Claude Sonnet does everything
 
-**Key Points to Highlight:**
+### Step 2 — Invoice List
 
-- [Point 1]
-- [Point 2]
+1. Navigate to Invoice List
+2. Show metric cards (total, returnable, expiring, expired)
+3. Search by store name
+4. Filter by return status
+5. Click image thumbnail to show original invoice from AWS S3
+6. **Key point:** Return deadlines calculated automatically
 
-**User Story/Requirement:** [Reference]
+### Step 3 — Invoice Detail
 
-#### Feature 2: [Feature Name]
+1. Click View on any invoice
+2. Show all extracted fields and line items
+3. Show return window progress bar and days remaining
+4. Show original invoice image loaded from AWS S3
+5. **Key point:** Full data traceability from image to structured data
 
-**Time Allocated:** [Minutes]
-**Presenter:** [Name]
-**Demo Script:**
+### Step 4 — Analytics
 
-1. [Demo step 1]
-2. [Demo step 2]
+1. Navigate to Analytics page
+2. Show monthly bar chart with colour per month
+3. Show quarterly donut chart
+4. Show top stores horizontal bar chart
+5. Change year/month filter and click Apply
+6. **Key point:** All charts built from real invoice data
 
-**Key Points to Highlight:**
+---
 
-- [Point 1]
+## Pre-Demo Checklist
 
-**User Story/Requirement:** [Reference]
+- [ ] Quarkus backend running on http://localhost:8080
+- [ ] Angular frontend running on http://localhost:4200
+- [ ] AWS credentials set in IntelliJ environment variables
+- [ ] At least 5 real invoice images ready for upload
+- [ ] PostgreSQL running and connected
+- [ ] Browser console closed and screen resolution set
 
-### 3. Q&A Session (15 minutes)
-
-[Time for questions and answers]
-
-### 4. Feedback Collection (10 minutes)
-
-[Collect stakeholder feedback]
-
-### 5. Acceptance Decision (5 minutes)
-
-[Decision on acceptance]
-
-## Demo Preparation
-
-### Pre-Demo Checklist
-
-- [ ] Demo environment set up and tested
-- [ ] Test data prepared
-- [ ] Demo scripts reviewed
-- [ ] Presentation materials ready
-- [ ] All demo participants briefed
-- [ ] Recording equipment tested (if applicable)
-- [ ] Backup plan in place
-
-### Demo Environment
-
-**Environment Type:** [Demo/Staging/Production-like]
-**URL/Access:** [Access information]
-**Test Accounts:** [Test user credentials]
-
-### Demo Data
-
-[Description of test data used in demo]
-
-### Technical Setup
-
-- **Screen Resolution:** [Resolution]
-- **Browser:** [Browser and version]
-- **Tools Required:** [List any tools]
-
-## Demo Execution
-
-### Feature Demonstrations
-
-#### Feature 1: [Feature Name]
-
-**Status:** [Demonstrated Successfully/Issues Encountered]
-**Duration:** [Actual time]
-**Notes:** [Any notes from the demonstration]
-
-**Feedback Received:**
-
-- [Feedback 1]
-- [Feedback 2]
-
-#### Feature 2: [Feature Name]
-
-**Status:** [Demonstrated Successfully/Issues Encountered]
-**Duration:** [Actual time]
-**Notes:** [Any notes from the demonstration]
-
-**Feedback Received:**
-
-- [Feedback 1]
-
-## Stakeholder Feedback
-
-### Positive Feedback
-
-- [Positive comment 1]
-- [Positive comment 2]
-- [Positive comment 3]
-
-### Concerns and Issues Raised
-
-#### Concern 1: [Description]
-
-**Raised by:** [Name]
-**Severity:** [High/Medium/Low]
-**Response:** [How it was addressed]
-**Action Required:** [Yes/No - Details]
-
-#### Concern 2: [Description]
-
-**Raised by:** [Name]
-**Severity:** [High/Medium/Low]
-**Response:** [How it was addressed]
-**Action Required:** [Yes/No - Details]
-
-### Suggestions for Improvement
-
-- [Suggestion 1]
-- [Suggestion 2]
-
-## Questions and Answers
-
-### Q1: [Question]
-
-**Asked by:** [Name]
-**Answer:** [Answer provided]
-**Follow-up Required:** [Yes/No]
-
-### Q2: [Question]
-
-**Asked by:** [Name]
-**Answer:** [Answer provided]
-**Follow-up Required:** [Yes/No]
+---
 
 ## Acceptance Criteria Review
 
-### Acceptance Criteria Verification
+| Requirement                            | Status | Evidence                       |
+|----------------------------------------|--------|--------------------------------|
+| User can upload invoice image or PDF   | Met    | Live demo                      |
+| AI extracts invoice data automatically | Met    | Live demo                      |
+| Math validation ensures data accuracy  | Met    | Error shown on invalid invoice |
+| Return deadlines tracked automatically | Met    | Days left shown in list        |
+| Monthly spending charts displayed      | Met    | Analytics page                 |
+| Invoices can be searched and filtered  | Met    | Live demo                      |
+| Original image stored and accessible   | Met    | AWS S3 URL in detail page      |
 
-#### Criterion 1: [Criterion Description]
-
-**Status:** [Met/Not Met/Partially Met]
-**Evidence:** [How it was demonstrated]
-**Accepted by:** [Stakeholder name]
-
-#### Criterion 2: [Criterion Description]
-
-**Status:** [Met/Not Met/Partially Met]
-**Evidence:** [How it was demonstrated]
-**Accepted by:** [Stakeholder name]
+---
 
 ## Acceptance Decision
 
-### Decision
+**Status:** Pending
+**Decision Maker:** WiFi Vienna Trainers
+**Date:** TBD
 
-**Status:** [Accepted/Conditionally Accepted/Rejected]
-**Date:** [YYYY-MM-DD]
-**Decision Maker:** [Name and title]
+*To be completed by the evaluating trainer after the demo presentation.*
 
-### Conditions (if Conditionally Accepted)
+---
 
-1. [Condition 1]
-2. [Condition 2]
+## Frontend Note
 
-### Reasons (if Rejected)
-
-1. [Reason 1]
-2. [Reason 2]
-
-## Sign-off
-
-### Formal Acceptance
-
-**I, [Name], [Title], hereby accept/conditionally accept/reject the demonstrated solution.**
-
-**Signature:** ___________________
-**Date:** [YYYY-MM-DD]
-
-**Comments:**
-[Any additional comments]
-
-## Action Items
-
-### Post-Demo Action Items
-
-- [ ] [Action item 1] - **Owner:** [Name], **Due:** [Date]
-- [ ] [Action item 2] - **Owner:** [Name], **Due:** [Date]
-- [ ] [Action item 3] - **Owner:** [Name], **Due:** [Date]
-
-## Follow-up Activities
-
-### Documentation
-
-- [ ] Update user documentation based on feedback
-- [ ] Create demo recording and share with stakeholders
-- [ ] Update FAQ based on questions asked
-
-### Next Steps
-
-1. [Next step 1]
-2. [Next step 2]
-3. [Next step 3]
-
-## Demo Recording
-
-**Recording Location:** [URL or file location]
-**Access:** [Who has access]
-
-## Lessons Learned
-
-### What Went Well
-
-- [Item 1]
-- [Item 2]
-
-### What Could Be Improved
-
-- [Item 1]
-- [Item 2]
-
-### Recommendations for Future Demos
-
-- [Recommendation 1]
-- [Recommendation 2]
-
-## Appendices
-
-### Appendix A: Demo Slides
-
-[Link to presentation slides]
-
-### Appendix B: Feature List
-
-[Detailed list of all features demonstrated]
-
-### Appendix C: Test Scenarios
-
-[Link to detailed test scenarios used in demo]
+The Angular frontend was generated with the assistance of Claude AI
+and serves as a visual interface to demonstrate the backend.
+The core project work is the Java/Quarkus backend including REST API,
+Claude Sonnet AI integration, AWS S3 storage, math validation,
+and return deadline tracking.

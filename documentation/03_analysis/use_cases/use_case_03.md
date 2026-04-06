@@ -1,59 +1,47 @@
-# Use Case 03: View and Manage Invoices
+# Use Case 03: View Invoice List
 
 ## Overview
 
-**ID:** UC-03  
-**Name:** View and Manage Invoices  
-**Primary Actor:** User  
-**Secondary Actors:** Backend API  
-**Brief Description:** The user views, searches, and deletes stored invoices.
+**ID:** UC-03
+**Name:** View Invoice List
+**Primary Actor:** User
+**Secondary Actors:** Quarkus Backend, PostgreSQL
+**Brief Description:** The user views all stored invoices in a table
+with return status, days left, and image thumbnails.
 
 ## Preconditions
 
-- At least one invoice is stored in the database
+- At least one invoice is saved in the database
+- The Quarkus backend is running
 
 ## Postconditions
 
-- Requested invoice data is displayed
-- Invoice may be deleted if requested
+- All invoices are displayed in the Angular UI with their current return status
 
 ## Main Success Scenario
 
-1. User requests a list of invoices.
-2. System retrieves invoice metadata from the database.
-3. User selects an invoice.
-4. System returns detailed invoice information.
-5. User optionally deletes an invoice.
-
-## Alternative Flows
-
-### Alternative Flow 1: Search Invoices
-
-**Condition:** User provides search parameters
-
-1. System filters invoices by date or store name.
-2. Filtered results are returned.
-3. Return to step 3 in main flow.
+1. User navigates to the Invoices page
+2. System calls GET /myinvoices
+3. Backend retrieves all invoices from PostgreSQL
+4. Backend calculates return status and days left for each invoice
+5. Angular UI displays invoices in a table with thumbnails,
+   status badges, and action buttons
 
 ## Exception Flows
 
-### Exception Flow 1: Invoice Not Found
+### Exception Flow 1: No Invoices Found
 
-**Condition:** Requested invoice ID does not exist
+**Condition:** Database is empty
 
-1. System returns error message.
-2. Use case ends in failure.
+1. System returns an empty list
+2. Angular UI displays "No invoices found"
 
-## Special Requirements
+### Exception Flow 2: Backend Unavailable
 
-- Fast query performance
-- Secure access to invoice data
+**Condition:** Quarkus backend is not running
+
+1. Angular UI displays a connection error
 
 ## Frequency of Use
 
-Frequent (regular invoice review)
-
-## Open Issues
-
-- Pagination strategy
-- Sorting options
+Very frequent — every time the user opens the application

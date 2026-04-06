@@ -1,122 +1,93 @@
-# Sprint 02
+# Sprint 01
 
 ## Sprint Information
 
-**Sprint Number:** 02
-**Sprint Goal:** Implement the first core system functionality by enabling invoice upload and secure storage,
-establishing the foundation for further feature development
+**Sprint Number:** 01
+**Sprint Goal:** Set up the project structure and implement
+the core invoice upload flow with AWS S3 storage
 **Start Date:** 2026-02-03
 **End Date:** 2026-02-13
 **Duration:** 10 days
+**Developer:** Madeha Mohammed
 
-## Sprint Team
-
-**Product Owner:** Madeha Mohammed
-**Scrum Master:** Madeha Mohammed
-**Development Team:**
-
-- Madeha Mohammed
+---
 
 ## Sprint Backlog
 
-### Committed User Stories
+| ID      | User Story                                      | Points | Status |
+|---------|-------------------------------------------------|--------|--------|
+| PBI-001 | Upload invoice image or PDF via drag-and-drop   | 8      | Done   |
+| PBI-002 | AI extracts store, date, total, VAT, line items | 8      | Done   |
+| PBI-003 | Confirm extracted data before saving            | 3      | Done   |
 
-#### PBI-001: Scan Invoice with Camera
+**Total committed: 19 story points**
 
-**Priority:** High
-**Estimation:** 5
-**Assigned to:** Madeha Mohammed
-**Status:** To Do
+---
 
-**Acceptance Criteria:**
+## Tasks
 
-- [ ] The user can open the camera from the application and capture an invoice image
-- [ ] The user can crop/adjust the captured image to focus on the relevant invoice area
-- [ ] The system stores the captured invoice image and basic metadata (e.g., date/time, filename) successfully
+| Task                                                          | Estimated | Status |
+|---------------------------------------------------------------|-----------|--------|
+| Set up Maven multi-module project (parent, backend, frontend) | 4h        | Done   |
+| Create InvoiceEntity, InvoiceItemEntity, InvoiceRepository    | 4h        | Done   |
+| Implement UploadController and InvoiceProcessingService       | 6h        | Done   |
+| Integrate AWS S3 via CloudStorageService                      | 4h        | Done   |
+| Integrate Claude Sonnet AI via LangChain4j InvoiceExtractor   | 6h        | Done   |
+| Implement InvoiceValidationService (file + math validation)   | 4h        | Done   |
+| Implement InvoiceReturnService and ReturnStatusInfo           | 3h        | Done   |
+| Set up Angular UI — upload page with step flow                | 5h        | Done   |
+| Manual testing via Postman and Angular UI                     | 4h        | Done   |
 
-**Tasks:**
+**Total estimated: 40h**
 
-- [ ] Create/update UML diagrams  (use case + sequence + class as needed)(Estimated: 20h, Remaining : 20h)
-- [ ] Implement camera capture + crop flow and persist invoice data (Estimated: 16h, Remaining: 16h)
-- [ ] Testing & bug fixes (basic unit/integration + manual test cases) (Estimated: 16h, Remaining: 16h)
-
-**Notes:** Scope of this PBI is camera-based scanning only
-
-#### PBI-002: [User Story Title]
-
-[User story details]
+---
 
 ## Sprint Capacity
 
-| Team Member     | Availability (%) | Available Hours | Committed Hours |
-|-----------------|------------------|-----------------|-----------------|
-| Madeha Mohammed | 100%             | 40              | 0               |
-| [Name 2]        | 100%             | 0               | 0               |
-| **Total**       |                  | **40**          | **0**           |
+| Member          | Availability | Available Hours | Committed Hours |
+|-----------------|--------------|-----------------|-----------------|
+| Madeha Mohammed | 100%         | 40h             | 40h             |
 
-## Daily Standups
-
-### Day 1 - 2026-02-03
-
-**Attendees:** Madeha Mohammed
-
-**Updates:**
-
-- Madeha Mohammed : Yesterday: user case , Today: user case , Blockers: [None/Details]
-- [Member]: Yesterday: [What], Today: [What], Blockers: [None/Details]
-
-## Sprint Burndown
-
-| Day | Date       | Remaining Story Points | Remaining Hours |
-|-----|------------|------------------------|-----------------|
-| 0   | 2026-02-03 | 10                     | 52h             |
-| 1   | [Date]     | [Points]               | [Hours]         |
-
-## Impediments
-
-[No impediments yet]
+---
 
 ## Sprint Review
 
-### Date and Attendees
-
-**Date:** [Date]
-**Attendees:** [Names]
+**Date:** 2026-02-13
 
 ### Demonstrated Items
 
-- [PBI-XXX]: [Description] - **Status:** [Accepted/Rejected]
-
-### Feedback
-
-- [Feedback item 1]
+| PBI     | Description                          | Result   |
+|---------|--------------------------------------|----------|
+| PBI-001 | Upload JPG invoice to AWS S3         | Accepted |
+| PBI-002 | Claude Sonnet extracts invoice data  | Accepted |
+| PBI-003 | Confirm extracted data before saving | Accepted |
 
 ### Metrics
 
-- **Planned Story Points:** [Number]
-- **Completed Story Points:** [Number]
-- **Velocity:** [Number]
-- **Sprint Goal Achievement:** [Yes/No/Partial]
+| Metric                 | Value |
+|------------------------|-------|
+| Planned story points   | 19    |
+| Completed story points | 19    |
+| Sprint goal achieved   | Yes   |
+
+---
 
 ## Sprint Retrospective
 
-### Date and Attendees
+### What went well
 
-**Date:** [Date]
-**Attendees:** [Names]
+- Maven multi-module setup worked cleanly
+- LangChain4j integration with Claude Sonnet was straightforward
+- AWS S3 upload and URL storage worked on first attempt
 
-### What Went Well
+### What could be improved
 
-- [Item 1]
+- AI extraction fails on low quality images — need better
+  error handling
+- Math validation edge cases took longer than expected
 
-### What Didn't Go Well
+### Action items for Sprint 02
 
-- [Item 1]
-
-### Action Items
-
-- [ ] [Action item 1] - **Owner:** [Name], **Due:** [Date]
-
-## Notes and Lessons Learned
-
-[Additional notes for Sprint 02]
+- [ ] Add better error messages for AI extraction failures
+- [ ] Start invoice list and detail pages in Angular
+- [ ] Add return status calculation to invoice detail

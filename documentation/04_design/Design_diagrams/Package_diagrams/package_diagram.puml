@@ -1,0 +1,96 @@
+@startuml Package_Diagram
+
+skinparam backgroundColor #ffffff
+skinparam arrow {
+    Color #555555
+}
+skinparam note {
+    BackgroundColor #fffde7
+    BorderColor #f9a825
+    FontColor #555555
+}
+
+title IntelliInvoice — Package Diagram
+
+package "at.madeha.intelliinvoice.restapi" <<Rectangle>> #B5D4F4 {
+    class UploadController
+    class InvoiceController
+    class InvoiceResponseDTO
+}
+
+package "at.madeha.intelliinvoice.service" <<Rectangle>> #C8E6C9 {
+    class InvoiceProcessingService
+    class InvoiceValidationService
+    class InvoiceReturnService
+    interface StorageService
+}
+
+package "at.madeha.intelliinvoice.service.helper" <<Rectangle>> #DCEDC8 {
+    class InvoiceUploadService
+    class ReturnStatusInfo
+}
+
+package "at.madeha.intelliinvoice.business" <<Rectangle>> #F8BBD0 {
+    class Invoice
+    class InvoiceItem
+    enum InvoiceStatus
+}
+
+package "at.madeha.intelliinvoice.database" <<Rectangle>> #FFE0B2 {
+    class InvoiceEntity
+    class InvoiceItemEntity
+    class InvoiceRepository
+}
+
+package "at.madeha.intelliinvoice.infrastructure" <<Rectangle>> #E1BEE7 {
+    class CloudStorageService
+    interface InvoiceExtractor
+    class S3ClientConfig
+}
+
+package "at.madeha.intelliinvoice.config" <<Rectangle>> #B2EBF2 {
+    class AWSConfig
+    class LLMConfig
+}
+
+package "at.madeha.intelliinvoice.exception" <<Rectangle>> #FFCDD2 {
+    class InvoiceValidationException
+    class FileUploadException
+    enum ErrorCode
+}
+
+RESTAPI   --> SERVICE   : uses
+RESTAPI   --> EXCEPTION : uses
+
+SERVICE   --> BUSINESS   : uses
+SERVICE   --> DATABASE   : uses
+SERVICE   --> INFRA      : uses
+SERVICE   --> EXCEPTION  : throws
+SERVICE   --> HELPER     : uses
+
+HELPER    --> INFRA      : uses
+HELPER    --> BUSINESS   : uses
+
+DATABASE  --> BUSINESS   : maps to
+
+INFRA     --> SERVICE    : implements
+INFRA     --> BUSINESS   : creates
+INFRA     --> CONFIG     : reads
+
+note bottom of BUSINESS
+  No dependencies.
+  Pure Java objects.
+  Used for AI extraction.
+end note
+
+note bottom of EXCEPTION
+  No dependencies.
+  Used by all layers.
+end note
+
+note bottom of CONFIG
+  No dependencies.
+  AWS + LLM settings.
+end note
+
+@enduml

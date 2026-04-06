@@ -1,0 +1,148 @@
+@startuml Class_Diagram_1
+
+' --- Color Customization ---
+skinparam backgroundColor #fdf5f8
+skinparam RoundCorner 10
+skinparam Shadowing true
+skinparam classAttributeIconSize 0
+skinparam defaultFontColor #000000
+
+' Controllers: Sky Blue (Entry Points)
+skinparam class<<Controller>> {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    HeaderBackgroundColor #BBDEFB
+}
+
+' Core Services: Emerald Green (Business Logic)
+skinparam class<<Service>> {
+    BackgroundColor #E8F5E9
+    BorderColor #2E7D32
+    HeaderBackgroundColor #C8E6C9
+}
+
+' Helper/Validation Services: Soft Purple
+skinparam class<<Helper>> {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+    HeaderBackgroundColor #E1BEE7
+}
+
+' Data Transfer Objects: Amber/Yellow
+skinparam class<<DTO>> {
+    BackgroundColor #FFF8E1
+    BorderColor #FF8F00
+    HeaderBackgroundColor #FFECB3
+}
+
+' Relationship Style
+skinparam arrow {
+    Color #455A64
+    FontColor #000000
+    Thickness 1.5
+}
+
+' Notes Style
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #BDBDBD
+}
+
+title Class Diagram 1 — REST API + Service Layer
+
+'--- CONTROLLERS ---
+class UploadController <<Controller>> {
+    - invoiceProcessingService: InvoiceProcessingService
+    --
+    + uploadInvoice(file: FileUpload): Response
+}
+
+class InvoiceController <<Controller>> {
+    - invoiceService: InvoiceProcessingService
+    - invoiceReturnService: InvoiceReturnService
+    --
+    + getAllInvoices(): List<InvoiceResponseDTO>
+    + getInvoice(id: UUID): Response
+    + searchByStore(name: String): List<InvoiceEntity>
+    + updateInvoice(invoice: InvoiceEntity): Response
+    + deleteInvoice(id: UUID): Response
+    + getMonthlySpending(year: int, month: int): Response
+}
+
+'--- SERVICES ---
+class InvoiceProcessingService <<Service>> {
+    - uploadHelper: InvoiceUploadService
+    - invoiceReturnService: InvoiceReturnService
+    - extractor: InvoiceExtractor
+    - invoiceValidationService: InvoiceValidationService
+    - repository: InvoiceRepository
+    --
+    + processUploadedInvoice(input, fileName, contentType): InvoiceEntity
+    + getInvoiceById(id: UUID): InvoiceEntity
+    + findAll(): List<InvoiceEntity>
+    + searchByStoreName(name: String): List<InvoiceEntity>
+    + updateInvoice(invoice: InvoiceEntity): Optional<InvoiceEntity>
+    + deleteInvoiceById(id: UUID): void
+    + calculateMonthlySpending(year: int, month: int): BigDecimal
+}
+
+class InvoiceReturnService <<Service>> {
+    --
+    + getReturnStatusUpdate(invoice: InvoiceEntity): ReturnStatusInfo
+}
+
+class InvoiceValidationService <<Helper>> {
+    --
+    + validateFile(input, fileName, contentType): void
+    + validate(invoice: InvoiceEntity): void
+}
+
+class InvoiceUploadService <<Helper>> {
+    - cloudStorageService: CloudStorageService
+    --
+    + processUploadedInvoice(input, fileName, contentType): String
+}
+
+'--- DTO ---
+class InvoiceResponseDTO <<DTO>> {
+    + id: UUID
+    + storeName: String
+    + invoiceDate: LocalDate
+    + totalAmount: BigDecimal
+    + vatAmount: BigDecimal
+    + status: String
+    + daysLeft: long
+    + invoiceNumber: Integer
+    --
+    + InvoiceResponseDTO(entity: InvoiceEntity, info: ReturnStatusInfo)
+}
+
+'--- RELATIONSHIPS ---
+UploadController   --> InvoiceProcessingService : uses
+InvoiceController  --> InvoiceProcessingService : uses
+InvoiceController  --> InvoiceReturnService      : uses
+
+InvoiceProcessingService --> InvoiceUploadService      : uses
+InvoiceProcessingService --> InvoiceReturnService      : uses
+InvoiceProcessingService --> InvoiceValidationService  : uses
+InvoiceProcessingService ..> InvoiceResponseDTO        : creates
+
+note right of InvoiceProcessingService
+  Orchestrates the full
+  upload and extraction
+  workflow:
+  1. Validate file
+  2. Upload to AWS S3
+  3. Extract with AI
+  4. Validate data
+  5. Save to database
+end note
+
+note right of InvoiceValidationService
+  Math validation:
+  line items + VAT
+  must equal total
+  before saving
+end note
+
+@enduml

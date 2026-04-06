@@ -2,27 +2,28 @@
 
 ## Vision
 
-To develop a reliable digital invoice management system that allows users to store, organize, and retrieve invoices at
-any time,
-even if the original paper invoice is lost, while supporting informed purchasing decisions through AI-based insights.
+To develop an intelligent invoice management system that eliminates manual data entry
+by using AI to read and understand receipts — giving users a complete digital archive
+of their purchases, automatic return deadline tracking, and clear spending insights,
+all accessible through a modern web interface.
 
 ## Problem Statement
 
-Paper invoices are easily lost or damaged, making returns, warranty claims, and expense tracking difficult.
-Users need a centralized and secure digital solution to manage invoices efficiently and access them when required.
+Everyday consumers lose paper receipts before they can use them for returns or
+warranty claims. Tracking spending across multiple stores manually is tedious and
+unreliable. Existing solutions require manual data entry which is time-consuming
+and error-prone. IntelliInvoice solves this by combining AI extraction, cloud
+storage, and automatic return tracking in one simple upload step.
 
 ## Goals
 
-* Provide a centralized system for digital invoice storage
-* Enable fast and reliable invoice retrieval
-* Minimize dependency on physical paper invoices
-* Support users with AI-assisted shopping insights
-* Ensure secure, stable, and user-friendly system operation
+* Replace manual receipt management with a single photo upload
+* Use AI to extract 100% of relevant invoice data automatically
+* Give users real-time visibility into return deadlines
+* Provide spending analytics without any manual categorization
+* Build a production-ready system with proper validation, error handling, and cloud infrastructure
 
 ## Success Criteria
 
-* Users can upload, store, and view invoices without critical errors
-* Invoices can be retrieved quickly for returns and warranty purposes
-* Core functionalities are implemented and function reliably
-* The system fulfills all defined project requirements
-* The project is properly documented and version-controlled
+* The Angular frontend communicates correctly with the Quarkus backend
+  through a documented REST API

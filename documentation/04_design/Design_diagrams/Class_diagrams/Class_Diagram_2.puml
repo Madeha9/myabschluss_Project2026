@@ -1,0 +1,203 @@
+@startuml Class_Diagram_2
+
+' --- Color Customization ---
+skinparam backgroundColor #fdf5f8
+skinparam RoundCorner 10
+skinparam Shadowing true
+skinparam classAttributeIconSize 0
+skinparam defaultFontColor #000000
+
+' Domain Objects: Sky Blue
+skinparam class<<domain>> {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    HeaderBackgroundColor #BBDEFB
+}
+
+' JPA Entities & Repositories: Orange (Persistence Layer)
+skinparam class<<persistence>> {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+    HeaderBackgroundColor #FFE0B2
+}
+
+' Infrastructure & Cloud: Soft Purple
+skinparam class<<infrastructure>> {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+    HeaderBackgroundColor #E1BEE7
+}
+
+' Enums & Records: Gray/White
+skinparam enum {
+    BackgroundColor #F5F5F5
+    BorderColor #616161
+}
+
+' Relationship Style
+skinparam arrow {
+    Color #455A64
+    FontColor #000000
+    Thickness 1.5
+}
+
+' Notes Style
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #BDBDBD
+}
+
+title Class Diagram 2 — Domain + Persistence + Infrastructure
+
+'--- BUSINESS OBJECTS ---
+class Invoice <<domain>> {
+    + id: UUID
+    + storeName: String
+    + invoiceDate: LocalDate
+    + totalAmount: BigDecimal
+    + vatAmount: BigDecimal
+    + currency: String
+    + imageUrl: String
+    + invoiceNumber: Integer
+    + returnDays: Integer
+    + items: List<InvoiceItem>
+}
+
+class InvoiceItem <<domain>> {
+    + description: String
+    + quantity: BigDecimal
+    + unitPrice: BigDecimal
+    + lineTotal: BigDecimal
+}
+
+'--- ENUM ---
+enum InvoiceStatus {
+    RETURNABLE
+    NON_RETURNABLE
+    SATISFIED
+}
+
+'--- RECORD ---
+class ReturnStatusInfo <<record>> {
+    + status: InvoiceStatus
+    + daysLeft: long
+}
+
+'--- JPA ENTITIES ---
+class InvoiceEntity <<persistence>> {
+    + id: UUID
+    + storeName: String
+    + invoiceDate: LocalDate
+    + totalAmount: BigDecimal
+    + vatAmount: BigDecimal
+    + currency: String
+    + imageUrl: String
+    + invoiceNumber: Integer
+    + returnDays: Integer
+    + status: InvoiceStatus
+    + createdAt: Instant
+    + updatedAt: Instant
+    + items: List<InvoiceItemEntity>
+}
+
+class InvoiceItemEntity <<persistence>> {
+    + id: UUID
+    + description: String
+    + quantity: BigDecimal
+    + unitPrice: BigDecimal
+    + lineTotal: BigDecimal
+    + invoice: InvoiceEntity
+}
+
+'--- REPOSITORY ---
+class InvoiceRepository <<persistence>> {
+    - em: EntityManager
+    --
+    + save(invoice: InvoiceEntity): InvoiceEntity
+    + findById(id: UUID): Optional<InvoiceEntity>
+    + findAll(): List<InvoiceEntity>
+    + findByStoreName(name: String): List<InvoiceEntity>
+    + deleteById(id: UUID): void
+    + deleteAll(): void
+}
+
+'--- INTERFACE ---
+interface StorageService <<infrastructure>> {
+    + uploadFile(input, fileName, contentType): String
+}
+
+'--- INFRASTRUCTURE ---
+class CloudStorageService <<infrastructure>> {
+    - accessKeyId: String
+    - secretAccessKey: String
+    - region: String
+    - bucketName: String
+    - s3Client: S3Client
+    --
+    + uploadFile(input, fileName, contentType): String
+}
+
+'--- AI INTERFACE ---
+interface InvoiceExtractor <<LangChain4j>> <<infrastructure>> {
+    + extract(imageUrl: String): Invoice
+}
+
+'--- EXCEPTION ---
+class InvoiceValidationException {
+    - errorCode: ErrorCode
+    --
+    + getErrorCode(): ErrorCode
+}
+
+'--- ERROR CODE ENUM ---
+enum ErrorCode {
+    INVOICE_NOT_FOUND
+    INVALID_INVOICE_DATA
+    FILE_UPLOAD_FAILED
+    DATABASE_ERROR
+    INVALID_FILE_FORMAT
+}
+
+'--- RELATIONSHIPS ---
+
+Invoice        "1" *-- "1..*" InvoiceItem        : contains
+InvoiceEntity  "1" *-- "1..*" InvoiceItemEntity  : CascadeType.ALL
+InvoiceItemEntity --> InvoiceEntity                : ManyToOne
+
+InvoiceEntity  --> InvoiceStatus                  : uses
+ReturnStatusInfo --> InvoiceStatus                : uses
+
+CloudStorageService ..|> StorageService            : implements
+InvoiceRepository   --> InvoiceEntity              : persists
+
+InvoiceValidationException --> ErrorCode          : uses
+
+note right of InvoiceExtractor
+  LangChain4j interface.
+  Sends S3 image URL
+  to Claude Sonnet.
+  Returns Invoice
+  Java object.
+end note
+
+note right of InvoiceEntity
+  JPA entity mapped
+  to 'invoice' table.
+  UUID primary key.
+end note
+
+note right of Invoice
+  Plain Java object.
+  No JPA annotations.
+  Used only for
+  AI extraction.
+end note
+
+note right of CloudStorageService
+  AWS SDK S3Client.
+  Credentials from
+  environment variables.
+  Bucket: eu-north-1
+end note
+
+@enduml

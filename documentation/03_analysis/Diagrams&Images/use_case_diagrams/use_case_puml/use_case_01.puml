@@ -1,0 +1,66 @@
+@startuml UC-01
+
+' --- Color Customization ---
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+skinparam RoundCorner 10
+skinparam Shadowing true
+skinparam defaultFontColor #000000
+
+' Actors
+skinparam actor {
+    BackgroundColor #F8BBD0
+    BorderColor #880E4F
+}
+
+' Usecase Styles by Type
+skinparam usecase<<Start>> {
+    BackgroundColor #E8F5E9
+    BorderColor #2E7D32
+}
+
+skinparam usecase<<System>> {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+}
+
+skinparam usecase<<Final>> {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+}
+
+' Boundaries and Arrows
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #455A64
+    BorderThickness 2
+}
+skinparam arrow {
+    Color #212121
+    Thickness 1.5
+}
+
+title UC-01 — Upload Invoice (Detailed Flow)
+
+actor "User" as User
+actor "AWS S3" as S3 <<System>>
+actor "PostgreSQL" as DB <<System>>
+
+rectangle "IntelliInvoice System" {
+    usecase "UC-01\nUpload Invoice"          as UC01 <<Start>>
+    usecase "Validate File"                  as VAL <<System>>
+    usecase "Store Image in AWS S3"          as STORE <<System>>
+    usecase "UC-02\nExtract Data with AI"    as UC02 <<System>>
+    usecase "UC-12\nConfirm & Save"          as UC12 <<Final>>
+}
+
+User  --> UC01
+UC01 ..> VAL   : <<include>>
+UC01 ..> STORE : <<include>>
+UC01 ..> UC02  : <<include>>
+UC01 ..> UC12  : <<include>>
+
+STORE --> S3 : Uploads File
+UC12  --> DB : Saves Metadata
+
+@enduml

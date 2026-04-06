@@ -2,199 +2,51 @@
 
 ## Overview
 
-This document outlines the overall testing strategy for the project.
+This document outlines the testing approach for IntelliInvoice.
+Testing was performed by a single developer using three levels:
+unit, integration, and system testing.
 
-## Testing Objectives
-
-1. [Objective 1]
-2. [Objective 2]
-3. [Objective 3]
-
-## Testing Scope
-
-### In Scope
-
-- [Area 1]
-- [Area 2]
-- [Area 3]
-
-### Out of Scope
-
-- [Area 1]
-- [Area 2]
+---
 
 ## Test Levels
 
-### Unit Testing
+| Level       | Objective                                         | Tool       | Scope                                        |
+|-------------|---------------------------------------------------|------------|----------------------------------------------|
+| Unit        | Test repository and validation logic in isolation | JUnit      | InvoiceRepository, InvoiceValidationService  |
+| Integration | Test REST API endpoints end to end                | Postman    | All /myinvoices and /UploadInvoice endpoints |
+| System      | Test full user flows in the browser               | Angular UI | Upload, list, detail, analytics, delete      |
+| Acceptance  | Verify features meet requirements                 | Angular UI | All implemented use cases                    |
 
-**Objective:** [Description]
-**Coverage Target:** [Percentage]
-**Tools:** [Testing frameworks and tools]
-**Responsibility:** [Team/Role]
+---
 
-**Approach:**
+## In Scope
 
-- [Approach detail 1]
-- [Approach detail 2]
+- Invoice upload and AI extraction flow
+- Database CRUD operations
+- REST API endpoints
+- Return status calculation
+- Error handling and validation
 
-### Integration Testing
+## Out of Scope
 
-**Objective:** [Description]
-**Coverage Target:** [Percentage]
-**Tools:** [Testing frameworks and tools]
-**Responsibility:** [Team/Role]
+- Performance and load testing
+- Security and penetration testing
+- Automated UI testing (e.g. Cypress)
+- Multi-user or authentication testing
 
-**Approach:**
-
-- [Approach detail 1]
-- [Approach detail 2]
-
-### System Testing
-
-**Objective:** [Description]
-**Coverage Target:** [Percentage]
-**Tools:** [Testing frameworks and tools]
-**Responsibility:** [Team/Role]
-
-**Approach:**
-
-- [Approach detail 1]
-- [Approach detail 2]
-
-### Acceptance Testing
-
-**Objective:** [Description]
-**Tools:** [Testing frameworks and tools]
-**Responsibility:** [Team/Role]
-
-**Approach:**
-
-- [Approach detail 1]
-- [Approach detail 2]
-
-## Test Types
-
-### Functional Testing
-
-[Description and approach]
-
-### Non-Functional Testing
-
-#### Performance Testing
-
-[Description and approach]
-
-#### Security Testing
-
-[Description and approach]
-
-#### Usability Testing
-
-[Description and approach]
-
-#### Compatibility Testing
-
-[Description and approach]
+---
 
 ## Test Environment
 
-### Hardware Requirements
+- **Machine:** MacOS, IntelliJ IDEA
+- **Backend:** Quarkus running on http://localhost:8080
+- **Frontend:** Angular running on http://localhost:4200
+- **Database:** PostgreSQL local instance
+- **External:** AWS S3 and Anthropic Claude API
 
-- [Requirement 1]
-- [Requirement 2]
+---
 
-### Software Requirements
+## Test Results
 
-- [Requirement 1]
-- [Requirement 2]
-
-### Test Data Requirements
-
-[Description of test data needs]
-
-## Test Automation
-
-### Automation Strategy
-
-[Description of automation approach]
-
-### Automation Tools
-
--
-
-[Tool 1]: [Purpose]
--
-
-[Tool 2]: [Purpose]
-
-### Automation Scope
-
-**Automated:**
-
-- [Test type 1]
-- [Test type 2]
-
-**Manual:**
-
-- [Test type 1]
-- [Test type 2]
-
-## Defect Management
-
-### Defect Tracking Tool
-
-[Tool name and process]
-
-### Severity Levels
-
-- **Critical:** [Definition]
-- **High:** [Definition]
-- **Medium:** [Definition]
-- **Low:** [Definition]
-
-### Defect Lifecycle
-
-[Description of defect lifecycle]
-
-## Test Metrics
-
-### Key Metrics
-
-- Test Coverage
-- Defect Density
-- Test Pass Rate
-- Defect Resolution Time
-
-### Reporting Frequency
-
-[How often metrics are reported]
-
-## Risks and Mitigation
-
-### Risk 1: [Risk Description]
-
-**Impact:** [High/Medium/Low]
-**Mitigation:** [Mitigation strategy]
-
-### Risk 2: [Risk Description]
-
-**Impact:** [High/Medium/Low]
-**Mitigation:** [Mitigation strategy]
-
-## Entry and Exit Criteria
-
-### Test Entry Criteria
-
-- [Criterion 1]
-- [Criterion 2]
-
-### Test Exit Criteria
-
-- [Criterion 1]
-- [Criterion 2]
-
-## Deliverables
-
-- [Deliverable 1]
-- [Deliverable 2]
-- [Deliverable 3]
+All 20 test cases passed with a **100% pass rate**.
+No critical defects were found during testing.

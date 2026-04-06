@@ -1,0 +1,95 @@
+@startuml Use_Case_Overview_Complete
+
+' --- High-Contrast Professional Palette ---
+skinparam backgroundColor #fdf5f8
+skinparam actorStyle awesome
+skinparam RoundCorner 10
+skinparam Shadowing true
+skinparam defaultFontColor #000000
+
+' Main User Actor (Vibrant Pink/Magenta)
+skinparam actor {
+    BackgroundColor #FF4081
+    BorderColor #C2185B
+    FontColor #C2185B
+}
+
+' System Actors (Clear Sky Blue)
+skinparam actor<<System>> {
+    BackgroundColor #00B0FF
+    BorderColor #0091EA
+    FontColor #01579B
+}
+
+' Usecases (White background inside Pink borders for maximum text clarity)
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #C2185B
+    FontColor #000000
+    FontSize 13
+}
+
+' Boundaries and Arrows
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #455A64
+    BorderThickness 2
+}
+skinparam arrow {
+    Color #212121
+    Thickness 1.5
+}
+
+title IntelliInvoice — Full Use Case Overview
+
+actor "User" as User
+actor "Claude AI" as AI <<System>>
+actor "AWS S3" as S3 <<System>>
+actor "PostgreSQL" as DB <<System>>
+
+rectangle "IntelliInvoice System" {
+    usecase "UC-01 Upload Invoice"                         as UC01
+    usecase "UC-02 Extract Invoice Data with AI"           as UC02
+    usecase "UC-03 View Invoice List"                     as UC03
+    usecase "UC-04 Search by Store Name"                  as UC04
+    usecase "UC-05 View Invoice Detail"                   as UC05
+    usecase "UC-06 Delete Invoice"                        as UC06
+    usecase "UC-07 Filter by Return Status"               as UC07
+    usecase "UC-08 View Spending Analytics"               as UC08
+    usecase "UC-09 View Original Invoice Image"           as UC09
+    usecase "UC-10 View Return Deadline Warning"          as UC10
+    usecase "UC-11 Navigate Between Pages"                as UC11
+    usecase "UC-12 Confirm Extracted Data Before Saving"  as UC12
+    usecase "UC-13 View Invoice Metrics Summary"          as UC13
+    usecase "UC-14 View Top Stores in Analytics"          as UC14
+    usecase "UC-15 View Quarterly Spending Breakdown"     as UC15
+}
+
+' User Actions (All 10 original links)
+User --> UC01
+User --> UC03
+User --> UC04
+User --> UC05
+User --> UC06
+User --> UC07
+User --> UC08
+User --> UC09
+User --> UC11
+User --> UC12
+
+' Logic Relationships (All 6 original includes)
+UC01  ..> UC02 : <<include>>
+UC01  ..> UC12 : <<include>>
+UC03  ..> UC10 : <<include>>
+UC03  ..> UC13 : <<include>>
+UC08  ..> UC14 : <<include>>
+UC08  ..> UC15 : <<include>>
+
+' System Interactions
+AI --> UC02
+S3 --> UC01
+S3 --> UC09
+DB --> UC03
+DB --> UC05
+
+@enduml

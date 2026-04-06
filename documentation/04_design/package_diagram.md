@@ -2,206 +2,86 @@
 
 ## Overview
 
-This document describes the package structure and dependencies of the IntelliInvoice backend system.
+This document describes the package structure and dependencies
+of the IntelliInvoice backend system.
+
+---
 
 ## Package Diagram
 
-![Pakage_UML.png](Pakage_UML.png)
+![package_diagram.png](Design_diagrams/Package_diagrams/package_diagram.png)
+
+---
 
 ## Package Descriptions
 
-### Package: at.madeha.intelliinvoice.restapi
+### at.madeha.intelliinvoice.restapi
 
-**Purpose:** REST API entry layer. Handles HTTP requests and forwards them to the Service layer.
+**Purpose:** REST API entry layer — handles HTTP requests
+and returns JSON responses.
+**Key Classes:** `UploadController`, `InvoiceController`,
+`InvoiceResponseDTO`
+**Depends on:** service, exception
 
-**Dependencies:**
+### at.madeha.intelliinvoice.service
 
-- `at.madeha.intelliinvoice.service` – Executes business use cases.
+**Purpose:** Business logic and workflow orchestration.
+Coordinates upload, AI extraction, validation, and persistence.
+**Key Classes:** `InvoiceProcessingService`,
+`InvoiceValidationService`, `InvoiceReturnService`,
+`InvoiceUploadService`, `StorageService (interface)`
+**Depends on:** business, database, infrastructure, exception
 
-**Key Classes:**
+### at.madeha.intelliinvoice.service.helper
 
-- UploadController
-- InvoiceController
+**Purpose:** Helper classes and records used by the service layer.
+**Key Classes:** `InvoiceUploadService`, `ReturnStatusInfo`
+**Depends on:** infrastructure, business
 
-**Visibility:**
+### at.madeha.intelliinvoice.business
 
-- Public: Controllers
-- Package-private: Request/response helpers
+**Purpose:** Core business objects used for AI extraction.
+Plain Java classes with no framework dependencies.
+**Key Classes:** `Invoice`, `InvoiceItem`, `InvoiceStatus`
+**Depends on:** nothing
 
-### Package: at.madeha.intelliinvoice.service
+### at.madeha.intelliinvoice.database
 
-**Purpose:** Contains business workflows and service logic. Coordinates invoice processing, validation, and external
-services via interfaces.
+**Purpose:** JPA entities and repository for database access.
+**Key Classes:** `InvoiceEntity`, `InvoiceItemEntity`,
+`InvoiceRepository`
+**Depends on:** business
 
-**Dependencies:**
+### at.madeha.intelliinvoice.infrastructure
 
-- `at.madeha.intelliinvoice.business` – Uses business entities.
-- `at.madeha.intelliinvoice.exception` – Uses custom exceptions.
+**Purpose:** External service integrations — AWS S3 and
+Claude Sonnet AI via LangChain4j.
+**Key Classes:** `CloudStorageService`, `InvoiceExtractor`,
+`S3ClientConfig`
+**Depends on:** service, business, config
 
-**Key Classes:**
+### at.madeha.intelliinvoice.config
 
-- InvoiceProcessingService
-- InvoiceValidationService
-- InvoiceReturnService
-- LLMService (interface)
-- StorageService (interface)
+**Purpose:** Configuration classes for AWS and LLM settings.
+**Key Classes:** `AWSConfig`, `LLMConfig`
+**Depends on:** nothing
 
-**Visibility:**
+### at.madeha.intelliinvoice.exception
 
-- Public: Service classes and interfaces
-- Package-private: Internal helper classes
+**Purpose:** Custom exception and error code definitions.
+**Key Classes:** `InvoiceValidationException`,
+`FileUploadException`, `ErrorCode`
+**Depends on:** nothing
 
-### Package: at.madeha.intelliinvoice.business
+---
 
-**Purpose:** Contains the core business model. Independent of frameworks and external systems.
+## Dependency Rules
 
-**Dependencies:**  
-None
-
-**Key Classes:**
-
-- Invoice
-- InvoiceItem
-- Money
-- InvoiceStatus (enum)
-
-**Visibility:**
-
-- Public: Business entities and value objects
-- Package-private: Internal business rules (if needed)
-
-### Package: at.madeha.intelliinvoice.database
-
-**Purpose:** Handles database access and data persistence.
-
-**Dependencies:**
-
-- `at.madeha.intelliinvoice.business` – Maps database data to business objects.
-- `at.madeha.intelliinvoice.service` – Implements repository interfaces.
-
-**Key Classes:**
-
-- InvoiceRepositoryImpl
-- InvoiceEntity
-
-**Visibility:**
-
-- Public: Repository implementations
-- Package-private: Database helpers/mappers
-
-### Package: at.madeha.intelliinvoice.infrastructure
-
-**Purpose:** Handles external integrations such as Vision LLM and cloud storage.
-
-**Dependencies:**
-
-- `at.madeha.intelliinvoice.service` – Implements service interfaces.
-- `at.madeha.intelliinvoice.business` – Creates business objects.
-
-**Key Classes:**
-
-- OpenAiVisionLLMService
-- CloudStorageService
-
-**Visibility:**
-
-- Public: Adapter implementations
-- Package-private: Provider-specific helpers
-
-### Package: at.madeha.intelliinvoice.config
-
-**Purpose:** Contains configuration classes for application setup.
-
-**Dependencies:**  
-None (used only for wiring and configuration)
-
-**Key Classes:**
-
-- AppConfig
-- LLMConfig
-
-**Visibility:**
-
-- Public: Configuration classes
-- Package-private: Constants
-
-### Package: at.madeha.intelliinvoice.exception
-
-**Purpose:** Contains custom exception classes and error definitions.
-
-**Dependencies:**  
-None
-
-**Key Classes:**
-
-- InvoiceValidationException
-- ErrorCode
-
-**Visibility:**
-
-- Public: Custom exception types
-- Package-private: Internal exception helpers
-
-### Package: at.madeha.intelliinvoice.utilities
-
-**Purpose:** Contains shared helper and utility classes.
-
-**Dependencies:**  
-None
-
-**Key Classes:**
-
-- DateUtils
-- ValidationUtils
-
-**Visibility:**
-
-- Public: Utility classes
-- Package-private: Internal helper methods
-
-## Package Design Principles
-
-### Layering
-
-The system follows a layered structure:
-
-- RestAPI calls Service.
-- Service uses Business.
-- Database and infrastructure handle technical details.
-- Business remains independent of other layers.
-
-### Dependency Rules
-
-1. The Business package must not depend on other packages.
-2. The RestAPI layer depends only on the Service layer.
-3. The Service layer depends only on the Business layer.
-4. Database and infrastructure implement interfaces from Service.
-5. Cyclic dependencies are not allowed.
-
-### Package Cohesion
-
-Each package has a clear responsibility:
-
-- RestAPI handles requests.
-- Service handles business workflows.
-- Business contains core business rules.
-- Database handles persistence.
-- Infrastructure handles external services.
-- Exception handles error management.
-- Utilities contains helper classes.
-- Config handles application configuration.
-
-## Package Naming Conventions
-
-- All package names are lowercase.
-- Packages are named by responsibility.
-- Root package: at.madeha.intelliinvoice.
-
-## Cyclic Dependencies
-
-There are no cyclic dependencies.  
-The dependency rules prevent circular references between packages.
-
-## Future Package Structure
-
-If the project grows, packages may be separated into independent modules without changing the architecture principles.
+1. `business` has no dependencies — core domain is framework-free
+2. `restapi` depends only on `service` and `exception`
+3. `service` depends on `business`, `database`, `infrastructure`,
+   and `exception`
+4. `database` depends only on `business`
+5. `infrastructure` depends on `service`, `business`, and `config`
+6. `config` and `exception` have no dependencies
+7. No cyclic dependencies are allowed

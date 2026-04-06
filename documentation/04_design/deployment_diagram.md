@@ -2,163 +2,131 @@
 
 ## Overview
 
-This document describes the deployment architecture of **IntelliInvoice**.  
-It shows where the backend, database, storage, and external LLM service run in **Dev / Test / Prod**.
+This document describes the deployment architecture of IntelliInvoice.
+The system currently runs in a local development environment.
+Production deployment is a future consideration.
+
+---
 
 ## Deployment Diagram
 
-![Deployment_Diagram.png](Deployment_Diagram.png)
+![Deployment_diagram.png](/documentation/04_design/Design_diagrams/Deployment_diagrams/Deployment_diagram.png)
+---
 
-## Deployment Environments
+## Current Deployment — Development Environment
 
-### Development Environment
+| Component        | Technology              | Location               |
+|------------------|-------------------------|------------------------|
+| Angular Frontend | Angular 21              | http://localhost:4200  |
+| Quarkus Backend  | Java 21 + Quarkus 3.2.3 | http://localhost:8080  |
+| Database         | PostgreSQL              | localhost:5432         |
+| Image Storage    | AWS S3 (eu-north-1)     | External cloud service |
+| AI Extraction    | Anthropic Claude Sonnet | External cloud service |
 
-**Purpose:** Local development and quick testing on one machine.
+**Developer machine:** macOS, IntelliJ IDEA
 
-**Nodes:**
+---
 
-- **Node 1:** Developer Laptop
-    - **Type:** Workstation
-    - **OS:** macOS
-    - **Components:**
-        - IntelliInvoice Backend (Quarkus) – local run
-        - PostgreSQL – local (Docker container planned)
-        - Local file storage (for invoice images) *or* simple cloud bucket test
-    - **Resources:**
-        - CPU: 5 cores
-        - Memory: 8–16 GB
-        - Storage: 5–10 GB free
+## Communication
 
-### Testing Environment
+```text
+       [ Browser (Angular) ]
+               │
+               ▼
+             HTTP
+               │
+   ┌───────────┴───────────┐
+   │  Quarkus Backend      │
+   │  (Port 8080)          │
+   └───────────┬───────────┘
+               │
+      ┌────────┴────────┬────────┐
+      ▼                 ▼        ▼
+     JPA              HTTPS    HTTPS
+ (Hibernate)         (S3 SDK) (REST/AI)
+      │                 │        │
+      ▼                 ▼        ▼
+[ PostgreSQL ]      [ AWS S3 ] [ Anthropic API ]
+ (Port 5432)        (Storage)  (AI Engine) 
+```
 
-**Purpose:** Test the full integration (Backend + Database + Storage + LLM) in a safe setup before production.
+---
 
-**Nodes:**
+## Environment Variables
 
-- **Node 1:** Test Setup (same machine / local)
-    - **Type:** Workstation (Developer laptop)
-    - **OS:** macOS
-    - **Components:**
-        - IntelliInvoice Backend (Quarkus) – running locally
-        - PostgreSQL – running in Docker (test database)
-        - Local folder or test cloud storage (invoice images)
-        - External LLM service (separate test API key, if available)
-    - **Resources:**
-        - CPU: same as development laptop
-        - Memory: same as development laptop
-        - Storage: minimal (a few GB for test data)
+Sensitive credentials are never stored in the code. Instead, they are set as environment variables in the IntelliJ
+Run Configuration and referenced in the application.properties file
 
-### Production Environment
+# AWS Connectivity Settings
 
-**Purpose:** Stable environment for real usage.
+AWS_ACCESS_KEY_ID = <your-aws-access-key>
+AWS_SECRET_ACCESS_KEY = <your-aws-secret-key>
+AWS_REGION = eu-north-1
 
-**Nodes:**
+# S3 Bucket Configuration
 
-- **Node 1:** Cloud Application
-    - **Type:** Cloud application service
-    - **Components:**
-        - IntelliInvoice Backend (Quarkus – Docker container)
-    - **Resources:**
-        - CPU: 5 cores
-        - Memory: 4 GB
-        - Storage: 10–20 GB
+AWS_BUCKET_NAME = intelliinvoice-files-wifi-2026
 
-- **Node 2:** Cloud Database
-    - **Type:** Managed database service
-    - **Components:**
-        - PostgreSQL database
-    - **Resources:**
-        - Managed by provider (automatic scaling and backups)
+---
 
-- **External Services (used by Production):**
-    - Cloud Storage (original invoice images)
-    - External LLM Service (Invoice data extraction API)
+## Build and Run
 
-## Network Configuration
+### Development mode — two terminals
 
-### Network Topology
+```bash
+# Terminal 1 — Quarkus backend
+cd backend
+./mvnw quarkus:dev
+# runs on http://localhost:8080
 
-- Client (Browser) connects to Backend via **HTTPS**
-- Backend connects to:
-    - Database via **internal network** (JDBC)
-    - Cloud Storage via **HTTPS**
-    - External LLM Service via **HTTPS**
+# Terminal 2 — Angular frontend
+cd frontend
+npm start
+# runs on http://localhost:4200
+```
 
-### Communication Protocols
+### Production build — one command
 
-- **HTTPS**: Client → Backend, Backend → Cloud Storage, Backend → LLM API
-- **JDBC (PostgreSQL)**: Backend → Database
+```bash
+# Builds backend + frontend into a single JAR
+mvn package
+```
 
-### Firewall Rules
+---
 
-### Basic Security Rules
+## Project Structure
 
-- Users can access the backend only via HTTPS.
-- The database is not publicly accessible.
-- Only the backend can connect to the database.
-- The backend can securely connect to:
-    - Cloud storage
-    - External LLM service
+```text
+intelli-invoice-parent/
+├── backend/         # Quarkus REST API (AI Engine + AWS S3 Integration)
+│   └── pom.xml
+├── frontend/        # Angular 21 Web Interface
+│   └── pom.xml
+└── pom.xml          # Parent POM (Multi-module Configuration)
+```
 
-## Deployment Procedures
+---
 
-### Deployment Steps
+## CORS Configuration
 
-1. Build the backend application (Quarkus JAR).
-2. Build Docker image for IntelliInvoice.
-3. Deploy Docker container to cloud platform.
-4. Configure environment variables:
+Since Angular (port 4200) and Quarkus (port 8080) run on
+different ports during development, CORS is handled by a
+dedicated Java filter:
 
-- Database connection (DB URL, username, password)
-- Cloud storage configuration
-- LLM API key
+```java
+@Provider
+public class CorsFilter implements ContainerResponseFilter {
+    // Allows requests from http://localhost:4200
+}
+```
 
-1. Start the application.
-2. Test deployment:
+---
 
-- Upload invoice
-- Verify image is stored
-- Verify extracted data is saved in PostgreSQL
+## Future Considerations
 
-### Rollback Procedures
-
-1. Re-deploy the previous stable backend version.
-2. Restore the latest database backup if data is affected
-
-## Monitoring and Logging
-
-### Monitoring
-
-- Application health endpoint to check if the service is running.
-- Docker/container logs to monitor runtime behavior.
-
-### Logging Strategy
-
-- Log important processing steps:
-    - Invoice upload received
-    - Image stored successfully
-    - LLM request sent and response received
-    - Invoice data saved in database
-- Log errors for debugging.
-- Never log sensitive information (e.g., passwords or API keys).
-
-## Backup and Disaster Recovery
-
-- The database is backed up regularly (manual or managed by cloud provider).
-- Original invoice images are stored in cloud storage.
-
-### Restore Plan
-
-1. Restore the latest database backup.
-2. Restart the backend application.
-3. Reconnect to cloud storage (invoice images remain stored).
-
-## Scaling Strategy
-
-- The system starts with a single backend instance.
-- If usage increases:
-    - The backend can be scaled by running multiple instances.
-    - The database resources can be increased using a managed service.
-    - Invoice processing can be handled asynchronously if needed.
-
-  
+- Docker containerization of the Quarkus backend
+- Cloud deployment (e.g. AWS, Railway, or Render)
+- CI/CD pipeline with GitHub Actions
+- Production PostgreSQL managed database
+- HTTPS and JWT-based authentication
+- Native mobile app with camera capture
