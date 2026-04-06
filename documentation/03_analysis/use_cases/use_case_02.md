@@ -23,7 +23,7 @@ extracted data and saves it to the PostgreSQL database.
 - Structured invoice data is saved in the PostgreSQL database:
     - Store name, invoice date, total amount, VAT, invoice number
     - Line items (description, quantity, unit price, line total)
-- Return status is calculated (RETURNABLE / NON_RETURNABLE / SATISFIED)
+- Return status is calculated (RETURNABLE / NON_RETURNABLE )
 - Invoice is assigned a unique UUID and visible in the invoice list
 
 ## Main Success Scenario

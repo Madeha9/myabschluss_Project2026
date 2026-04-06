@@ -18,7 +18,7 @@ data, and saves everything to the PostgreSQL database.
 
 ### Diagram
 
-![Activity Diagram 1](activity_diagram_01.png)
+![activity_diagram_01.png](Diagrams%26Images/activity_diagrams/activity_diagram_01.png)
 
 ### Actors
 
@@ -73,7 +73,7 @@ view details, or delete an invoice.
 
 ### Diagram
 
-![Activity Diagram 2](activity_diagram_02.png)
+![activity_diagram_02.png](Diagrams%26Images/activity_diagrams/activity_diagram_02.png)
 
 ### Actors
 
@@ -124,7 +124,7 @@ from stored invoices and renders interactive Chart.js charts.
 
 ### Diagram
 
-![Activity Diagram 3](activity_diagram_03.png)
+![activity_diagram_03.png](Diagrams%26Images/activity_diagrams/activity_diagram_03.png)
 
 ### Actors
 

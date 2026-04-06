@@ -1,0 +1,70 @@
+@startuml
+' --- Global Styles ---
+skinparam ConditionStyle InsideDiamond
+skinparam DefaultFontName Arial
+
+title Activity Diagram 2 — View and Manage Invoices
+
+' --- Swimlane Definitions with Colors and Icons ---
+
+|#E3F2FD|<&person> User|
+start
+:Navigate to\nInvoice List page;
+
+|#FFEBEE|Quarkus Backend|
+:Load all invoices\nfrom PostgreSQL;
+:Calculate return status\nand days left per invoice;
+
+|#E8F5E9|Angular Frontend|
+if (Invoices found?) then (no)
+    #pink:Display "No invoices found";
+    stop
+else (yes)
+    :Display invoice table\nwith status badges\nand thumbnails;
+endif
+
+|#E3F2FD|<&person> User|
+:Search by store name\nor apply status filter;
+
+|#E8F5E9|Angular Frontend|
+if (Results found?) then (no)
+    :Display "No results found";
+else (yes)
+    :Update table with\nmatching invoices;
+endif
+
+|#E3F2FD|<&person> User|
+:Select invoice\nto view details;
+
+|#FFEBEE|Quarkus Backend|
+:Fetch full invoice data\nincluding line items;
+
+if (Invoice found?) then (no)
+    |#E8F5E9|Angular Frontend|
+    #pink:Display INVOICE_NOT_FOUND;
+    stop
+else (yes)
+    |#E8F5E9|Angular Frontend|
+    :Display invoice detail\nwith original image\nfrom AWS S3;
+endif
+
+|#E3F2FD|<&person> User|
+if (User wants to delete?) then (no)
+    :Navigate back to List;
+else (yes)
+    |#E8F5E9|Angular Frontend|
+    :Show confirmation dialog;
+    |#E3F2FD|<&person> User|
+    if (User confirms?) then (no)
+        |#E8F5E9|Angular Frontend|
+        :Cancel and stay\non detail page;
+    else (yes)
+        |#FFEBEE|Quarkus Backend|
+        :Delete invoice and items\nfrom PostgreSQL;
+        |#E8F5E9|Angular Frontend|
+        :Return to Invoice List;
+    endif
+endif
+
+stop
+@enduml

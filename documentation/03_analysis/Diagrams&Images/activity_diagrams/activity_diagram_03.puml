@@ -1,0 +1,42 @@
+@startuml
+' --- Global Styles ---
+skinparam ConditionStyle InsideDiamond
+skinparam DefaultFontName Arial
+
+title Activity Diagram 3 — View Spending Analytics
+
+' --- Swimlane Definitions with Colors and Icons ---
+
+|#E3F2FD|<&person> User|
+start
+:Navigate to\nAnalytics page;
+
+|#FFEBEE|Quarkus Backend|
+:Load all invoices\nfrom PostgreSQL;
+:Call GET /myinvoices/spending\nfor selected year and month;
+
+|#E8F5E9|Angular Frontend|
+:Calculate monthly totals;
+:Calculate quarterly breakdown;
+:Calculate top 5 stores;
+
+if (Data available for selected period?) then (no)
+    :Display charts\nwith zero values;
+else (yes)
+    :Render monthly bar chart;
+    :Render quarterly donut chart;
+    :Render top stores chart;
+endif
+
+|#E3F2FD|<&person> User|
+:Select different year/month;
+:Click Apply;
+
+|#FFEBEE|Quarkus Backend|
+:Call GET /myinvoices/spending\nwith new parameters;
+
+|#E8F5E9|Angular Frontend|
+:Rebuild all three\ncharts with new data;
+
+stop
+@enduml
