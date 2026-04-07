@@ -1,43 +1,49 @@
-# Use Case 12: Confirm Extracted Data Before Saving
+# Use Case 12: Review Extracted Invoice Data
 
 ## Overview
 
 **ID:** UC-12
-**Name:** Confirm Extracted Data Before Saving
+**Name:** Review Extracted Invoice Data
 **Primary Actor:** User
 **Secondary Actors:** Quarkus Backend, PostgreSQL
-**Brief Description:** After AI extraction the user reviews
-the extracted invoice data and confirms or discards it
-before it is saved to the database.
+**Brief Description:** After AI extraction the invoice is
+automatically saved to the database. The user reviews the
+extracted data in the detail page and deletes it if incorrect.
+
+## Use Case Diagram
+
+![use_case_12.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_12.png)
 
 ## Preconditions
 
 - UC-02 completed successfully
-- Extracted data is displayed in the Angular UI
+- Invoice automatically saved to PostgreSQL
+- Invoice visible in the Invoice List
 
 ## Postconditions
 
-- If confirmed: invoice is saved to the database
-- If discarded: nothing is saved and user can upload again
+- Data correct → invoice stays in the database
+- Data wrong → user deletes and re-uploads
 
 ## Main Success Scenario
 
-1. Angular UI displays the extracted data:
-   store name, date, total, VAT, invoice number, status
-2. User reviews the extracted fields
-3. User clicks "Confirm and save"
-4. System saves the invoice to the database
-5. Angular UI displays the success screen
+1. System automatically saves invoice to PostgreSQL
+2. User opens the Invoice List
+3. User clicks View to open the invoice detail
+4. User reviews all extracted fields and line items
+5. Data is correct — invoice is kept
 
-## Alternative Flows
+## Alternative Flow: Data is Incorrect
 
-### Alternative Flow 1: User Discards
+1. User finds wrong data in the detail page
+2. User clicks Delete
+3. System removes invoice and all line items
+4. User re-uploads with a better quality image
 
-**Condition:** Extracted data is incorrect or unwanted
+## Special Requirements
 
-1. User clicks "Discard"
-2. Nothing is saved to the database
-3. User is returned to the upload screen
+- No manual confirm step — data is saved automatically
+- User cannot edit fields — delete and re-upload only
 
 ## Frequency of Use
 

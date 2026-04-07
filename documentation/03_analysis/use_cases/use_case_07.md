@@ -9,6 +9,10 @@
 **Brief Description:** The user filters the invoice list
 by return status using the filter chips.
 
+## Use Case Diagram
+
+![use_case_07.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_07.png)
+
 ## Preconditions
 
 - User is on the Invoice List page

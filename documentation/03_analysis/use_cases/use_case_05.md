@@ -10,6 +10,10 @@
 full extracted data, line items, return window progress,
 and the original image from AWS S3.
 
+## Use Case Diagram
+
+![use_case_05.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_05.png)
+
 ## Preconditions
 
 - Invoice exists in the database

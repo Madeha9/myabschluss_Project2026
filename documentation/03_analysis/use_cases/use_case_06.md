@@ -9,6 +9,10 @@
 **Brief Description:** The user deletes a stored invoice
 from the database.
 
+## Use Case Diagram
+
+![use_case_06.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_06.png)
+
 ## Preconditions
 
 - Invoice exists in the database

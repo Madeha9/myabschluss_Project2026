@@ -1,22 +1,34 @@
-@startuml
-'https://plantuml.com/use-case-diagram
+@startuml UC-08
 
-:Main Admin: as Admin
-(Use the application) as (Use)
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+skinparam usecase {
+    BackgroundColor #fce4ec
+    BorderColor #880e4f
+    FontColor #880e4f
+}
+skinparam actor {
+    BackgroundColor #880e4f
+    FontColor #880e4f
+}
+skinparam arrow {
+    Color #880e4f
+}
 
-User -> (Start)
-User --> (Use)
+title UC-08 — View Spending Analytics
 
-Admin ---> (Use)
+actor "User" as User
+database "PostgreSQL" as DB
 
-note right of Admin : This is an example.
+rectangle "IntelliInvoice System" {
+    usecase "UC-08\nView Spending Analytics"       as UC08
+    usecase "UC-14\nView Top Stores"               as UC14
+    usecase "UC-15\nView Quarterly Breakdown"      as UC15
+}
 
-note right of (Use)
-A note can also
-be on several lines
-end note
+User --> UC08
+UC08 ..> UC14 : <<include>>
+UC08 ..> UC15 : <<include>>
+UC08  --> DB
 
-note "This note is connected\nto several objects." as N2
-(Start) .. N2
-N2 .. (Use)
 @enduml

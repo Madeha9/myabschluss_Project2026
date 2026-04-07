@@ -11,6 +11,10 @@ automatically sends the image URL to Claude Sonnet AI, which extracts structured
 invoice data and returns it as a Java object. The system then validates the
 extracted data and saves it to the PostgreSQL database.
 
+## Use Case Diagram
+
+![use_case_02.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_02.png)
+
 ## Preconditions
 
 - UC-01 completed successfully

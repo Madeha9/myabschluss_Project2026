@@ -9,6 +9,10 @@
 **Brief Description:** The user views all stored invoices in a table
 with return status, days left, and image thumbnails.
 
+## Use Case Diagram
+
+![use_case_03.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_03.png)
+
 ## Preconditions
 
 - At least one invoice is saved in the database

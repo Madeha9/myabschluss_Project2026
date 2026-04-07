@@ -9,6 +9,10 @@
 **Brief Description:** The user views monthly and yearly spending
 summaries through interactive Chart.js charts.
 
+## Use Case Diagram
+
+![use_case_08.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_08.png)
+
 ## Preconditions
 
 - At least one invoice is saved in the database

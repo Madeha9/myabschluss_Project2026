@@ -10,6 +10,10 @@
 that are expiring within 5 days so the user can act before
 the return window closes.
 
+## Use Case Diagram
+
+![use_case_10.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_10.png)
+
 ## Preconditions
 
 - At least one RETURNABLE invoice exists

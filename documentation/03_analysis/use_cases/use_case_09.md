@@ -9,6 +9,10 @@
 **Brief Description:** The user clicks an invoice thumbnail
 to view the original invoice image stored in AWS S3.
 
+## Use Case Diagram
+
+![use_cse_09.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_cse_09.png)
+
 ## Preconditions
 
 - Invoice has an imageUrl stored in the database

@@ -9,6 +9,10 @@
 **Brief Description:** The user searches for invoices by typing
 a store name in the search field.
 
+## Use Case Diagram
+
+![use_case_04.png](../Diagrams%26Images/use_case_diagrams/use_case_png/use_case_04.png)
+
 ## Preconditions
 
 - At least one invoice is saved in the database

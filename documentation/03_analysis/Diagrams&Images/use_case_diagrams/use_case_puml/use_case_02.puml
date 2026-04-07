@@ -1,22 +1,68 @@
-@startuml
-'https://plantuml.com/use-case-diagram
+@startuml UC-02
+!pragma layout smetana
 
-:Main Admin: as Admin
-(Use the application) as (Use)
+' --- Global Styles ---
+skinparam actorStyle awesome
+skinparam backgroundColor #fdf5f8
+skinparam DefaultFontName "Verdana"
+' This forces all default text to black
+skinparam DefaultFontColor #000000
 
-User -> (Start)
-User --> (Use)
+' --- Use Case Style ---
+skinparam usecase {
+    BackgroundColor #fce4ec
+    BorderColor #880e4f
+    FontColor #000000
+}
 
-Admin ---> (Use)
+' --- External Entities Style ---
+skinparam actor {
+    BackgroundColor #880e4f
+    BorderColor #4a001f
+    FontColor #000000
+}
 
-note right of Admin : This is an example.
+skinparam cloud {
+    BackgroundColor #E1F5FE
+    BorderColor #01579B
+    FontColor #000000
+}
 
-note right of (Use)
-A note can also
-be on several lines
-end note
+skinparam database {
+    BackgroundColor #E8F5E9
+    BorderColor #1B5E20
+    FontColor #000000
+}
 
-note "This note is connected\nto several objects." as N2
-(Start) .. N2
-N2 .. (Use)
+' --- Arrow Style ---
+skinparam arrow {
+    Color #880e4f
+    FontColor #000000
+}
+
+title UC-02 — Extract Invoice Data with AI
+
+' --- Actors & Entities ---
+actor "Claude Sonnet AI" as AI #880e4f
+cloud "AWS S3" as S3 #E1F5FE
+database "PostgreSQL" as DB #E8F5E9
+
+' --- System Boundary ---
+rectangle "IntelliInvoice System" #white {
+    usecase "UC-01\nUpload Invoice" as UC01
+    usecase "UC-02\nExtract Data with AI" as UC02
+    usecase "Validate Extracted Data" as VAL
+    usecase "Save Invoice to Database" as SAVE
+}
+
+' --- Relationships ---
+UC01 ..> UC02 : <<include>>
+UC02 ..> VAL  : <<include>>
+UC02 ..> SAVE : <<include>>
+
+' Data flow arrows
+S3  -[#01579B]-> UC02 : provides image URL
+AI  -[#880e4f]-> UC02 : returns extracted data
+SAVE -[#1B5E20]-> DB   : persists data
+
 @enduml
