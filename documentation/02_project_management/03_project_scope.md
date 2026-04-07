@@ -19,7 +19,7 @@ The project includes the following features and functionality:
 ### Return Tracking
 
 - Automatic calculation of days remaining to return each item
-- Invoice status: RETURNABLE, NON_RETURNABLE, SATISFIED
+- Invoice status: RETURNABLE, NON_RETURNABLE
 - Search and filter invoices by store name and return status
 
 ### Spending Analytics

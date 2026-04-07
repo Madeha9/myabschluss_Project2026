@@ -13,23 +13,23 @@ and analyse spending patterns through an Angular web interface.
 
 ## Use Case List
 
-| ID    | Use Case Name                        | Primary Actor | Priority | Status      |
-|-------|--------------------------------------|---------------|----------|-------------|
-| UC-01 | Upload Invoice                       | User          | High     | Implemented |
-| UC-02 | Extract Invoice Data with AI         | System        | High     | Implemented |
-| UC-03 | View Invoice List                    | User          | High     | Implemented |
-| UC-04 | Search Invoice by Store Name         | User          | Medium   | Implemented |
-| UC-05 | View Invoice Detail                  | User          | High     | Implemented |
-| UC-06 | Delete Invoice                       | User          | Medium   | Implemented |
-| UC-07 | Filter Invoices by Return Status     | User          | Medium   | Implemented |
-| UC-08 | View Spending Analytics              | User          | Medium   | Implemented |
-| UC-09 | View Original Invoice Image          | User          | Low      | Implemented |
-| UC-10 | View Return Deadline Warning         | System        | High     | Implemented |
-| UC-11 | Navigate Between Pages               | User          | Medium   | Implemented |
-| UC-12 | Confirm Extracted Data Before Saving | User          | High     | Implemented |
-| UC-13 | View Invoice Metrics Summary         | System        | Medium   | Implemented |
-| UC-14 | View Top Stores in Analytics         | System        | Low      | Implemented |
-| UC-15 | View Quarterly Spending Breakdown    | System        | Low      | Implemented |
+| ID    | Use Case Name                     | Primary Actor | Priority | Status      |
+|-------|-----------------------------------|---------------|----------|-------------|
+| UC-01 | Upload Invoice                    | User          | High     | Implemented |
+| UC-02 | Extract Invoice Data with AI      | System        | High     | Implemented |
+| UC-03 | View Invoice List                 | User          | High     | Implemented |
+| UC-04 | Search Invoice by Store Name      | User          | Medium   | Implemented |
+| UC-05 | View Invoice Detail               | User          | High     | Implemented |
+| UC-06 | Delete Invoice                    | User          | Medium   | Implemented |
+| UC-07 | Filter Invoices by Return Status  | User          | Medium   | Implemented |
+| UC-08 | View Spending Analytics           | User          | Medium   | Implemented |
+| UC-09 | View Original Invoice Image       | User          | Low      | Implemented |
+| UC-10 | View Return Deadline Warning      | System        | High     | Implemented |
+| UC-11 | Navigate Between Pages            | User          | Medium   | Implemented |
+| UC-12 | Review Extracted Invoice Data     | User          | Low      | Implemented |
+| UC-13 | View Invoice Metrics Summary      | System        | Medium   | Implemented |
+| UC-14 | View Top Stores in Analytics      | System        | Low      | Implemented |
+| UC-15 | View Quarterly Spending Breakdown | System        | Low      | Implemented |
 
 ## Actors
 

@@ -44,7 +44,7 @@ for data extraction, validates the extracted data, and saves everything to the d
     - Line items + VAT must equal the total amount
 9. System calculates the return status based on invoice date and return days
 10. System saves the invoice and line items to the PostgreSQL database
-11. Angular UI displays a success screen with the extracted data for confirmation
+11. Angular UI displays a success screen with the extracted data
 
 ## Alternative Flows
 

@@ -25,7 +25,7 @@ by return status using the filter chips.
 ## Main Success Scenario
 
 1. User clicks a filter chip
-   (Returnable, Non-returnable, or Satisfied)
+   (Returnable, Non-returnable)
 2. Angular filters the already loaded invoice list
 3. Table updates instantly with matching invoices
 
