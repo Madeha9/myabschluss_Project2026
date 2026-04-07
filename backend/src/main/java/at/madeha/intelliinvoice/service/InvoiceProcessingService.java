@@ -98,10 +98,14 @@ public class InvoiceProcessingService {
      * without reloading the entire page.
      */
     public List<InvoiceEntity> searchByStoreName(String storeName) {
-        LOG.info("Searching for invoices from: " + storeName);
+        LOG.info("Searching for invoices containing: " + storeName);
+
+        //  to ignore the lower cases issues
+        String searchLower = storeName.toLowerCase();
+
         return repository.findAll().stream()
                 .filter(inv -> inv.getStoreName() != null &&
-                        inv.getStoreName().equalsIgnoreCase(storeName))
+                        inv.getStoreName().toLowerCase().contains(searchLower))
                 .toList();
     }
 

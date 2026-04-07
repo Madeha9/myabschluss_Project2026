@@ -1,19 +1,19 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { InvoiceService } from '../../services/invoice.service';
-import { InvoiceResponseDTO, InvoiceStatus } from '../../models/invoice.model';
+import {Component, computed, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {MatTableModule} from '@angular/material/table';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCardModule} from '@angular/material/card';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {InvoiceService} from '../../services/invoice.service';
+import {InvoiceResponseDTO, InvoiceStatus} from '../../models/invoice.model';
 
 @Component({
   imports: [
@@ -85,7 +85,6 @@ import { InvoiceResponseDTO, InvoiceStatus } from '../../models/invoice.model';
       border: 0.5px solid #f8bbd0;
     }
 
-    /* pink table header */
     ::ng-deep .mat-mdc-header-row {
       background: #fce4ec !important;
     }
@@ -94,7 +93,6 @@ import { InvoiceResponseDTO, InvoiceStatus } from '../../models/invoice.model';
       font-weight: 500 !important;
     }
 
-    /* alternating pink rows */
     ::ng-deep .mat-mdc-row:nth-child(even) td {
       background: #fff5f8;
     }
@@ -124,7 +122,6 @@ import { InvoiceResponseDTO, InvoiceStatus } from '../../models/invoice.model';
     .badge-returnable     { background: #e8f5e9; color: #2e7d32; }
     .badge-non-returnable { background: #fce4ec; color: #880e4f; }
     .badge-expiring       { background: #fff3e0; color: #e65100; }
-    .badge-satisfied      { background: #f3e5f5; color: #6a1b9a; }
 
     .days-ok   { color: #2e7d32; font-weight: 500; }
     .days-warn { color: #e65100; font-weight: 500; }
@@ -219,11 +216,6 @@ import { InvoiceResponseDTO, InvoiceStatus } from '../../models/invoice.model';
                 [class.active-chip]="activeFilters.has('NON_RETURNABLE')"
                 (click)="toggleFilter('NON_RETURNABLE')">
           <mat-icon>cancel</mat-icon> Non-returnable
-        </button>
-        <button mat-stroked-button
-                [class.active-chip]="activeFilters.has('SATISFIED')"
-                (click)="toggleFilter('SATISFIED')">
-          <mat-icon>task_alt</mat-icon> Satisfied
         </button>
       </div>
     </div>
@@ -372,7 +364,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   onSearch(term: string) {
-    if (term.length > 1) {
+    if (term && term.length > 0) {
       this.svc.searchByStore(term).subscribe(data => {
         this.invoices.set(data);
         this.applyFilters();
@@ -414,15 +406,11 @@ export class InvoiceListComponent implements OnInit {
   onImgError(e: Event) { (e.target as HTMLImageElement).style.display = 'none'; }
 
   statusLabel(s: InvoiceStatus) {
-    return s === 'RETURNABLE' ? 'Returnable'
-      : s === 'NON_RETURNABLE' ? 'Non-returnable'
-        : 'Satisfied';
+    return s === 'RETURNABLE' ? 'Returnable' : 'Non-returnable';
   }
 
   statusClass(s: InvoiceStatus) {
-    return s === 'RETURNABLE' ? 'badge-returnable'
-      : s === 'NON_RETURNABLE' ? 'badge-non-returnable'
-        : 'badge-satisfied';
+    return s === 'RETURNABLE' ? 'badge-returnable' : 'badge-non-returnable';
   }
 
   daysClass(d: number) { return d <= 5 ? 'days-warn' : 'days-ok'; }

@@ -14,6 +14,4 @@ public enum InvoiceStatus {
      * The return period has expired or the items cannot be returned.
      */
     NON_RETURNABLE,
-    /** The purchase is completed and the user is satisfied. */
-    SATISFIED
 }
