@@ -1,0 +1,98 @@
+@startuml
+' --- Color Customization ---
+skinparam backgroundColor #fdf5f8
+skinparam RoundCorner 10
+skinparam Shadowing true
+skinparam defaultFontColor #000000
+
+' Nodes (Gray for the machine)
+skinparam node {
+    BackgroundColor #F5F5F5
+    BorderColor #424242
+}
+
+' Frontend (Blue)
+skinparam component<<frontend>> {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+}
+
+' Backend (Green)
+skinparam component<<backend>> {
+    BackgroundColor #E8F5E9
+    BorderColor #388E3C
+}
+
+' Database (Orange/Yellow)
+skinparam database {
+    BackgroundColor #FFF3E0
+    BorderColor #E65100
+}
+
+' Cloud Services (Purple)
+skinparam cloud {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+}
+
+' Notes (White)
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #BDBDBD
+}
+
+title IntelliInvoice — Deployment Diagram (Development)
+
+node "Developer Machine\n(MacOS + IntelliJ IDEA)" as DEV {
+
+    node "Angular Frontend\nlocalhost:4200" as FRONTEND {
+        component "Angular 21\nWeb Interface" as UI <<frontend>>
+    }
+
+    node "Quarkus Backend\nlocalhost:8080" as BACKEND {
+        component "REST API\n(InvoiceController\nUploadController)" as API <<backend>>
+        component "Service Layer\n(InvoiceProcessingService)" as SVC <<backend>>
+        component "Repository Layer\n(InvoiceRepository)" as REPO <<backend>>
+    }
+
+    database "PostgreSQL\nlocalhost:5432" as DB {
+        component "invoice" as T1
+        component "invoice_item" as T2
+    }
+}
+
+cloud "AWS S3\neu-north-1" as S3 {
+    component "Invoice Images\n(original files)" as IMAGES
+}
+
+cloud "Anthropic API\n(Claude Sonnet)" as AI {
+    component "AI Extraction\n(LangChain4j)" as EXTRACT
+}
+
+UI      --> API      : HTTP REST\nlocalhost:8080
+API      --> SVC      : delegates
+SVC      --> REPO     : save / find / delete
+REPO     --> DB       : JPA / Hibernate
+SVC      --> S3       : HTTPS\nupload image
+SVC      --> AI       : HTTPS\nsend S3 URL
+
+note right of S3
+  Only image URL
+  stored in DB.
+  Images accessed
+  directly by Angular.
+end note
+
+note right of AI
+  Credentials via
+  environment variables.
+  Never stored in code.
+end note
+
+note bottom of DB
+  Tables:
+  invoice +
+  invoice_item
+  (UUID primary keys)
+end note
+@enduml
