@@ -30,8 +30,6 @@ public class InvoiceProcessingService {
     @Inject
     InvoiceUploadService invoiceUploadService;
     @Inject
-    InvoiceReturnService invoiceReturnService;
-    @Inject
     InvoiceExtractor aiInvoiceParser;
     @Inject
     InvoiceValidationService invoiceValidationService;

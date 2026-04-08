@@ -4,7 +4,7 @@
  */
 
 /** Defines the three possible return states for an invoice. */
-export type InvoiceStatus = 'RETURNABLE' | 'NON_RETURNABLE' | 'SATISFIED';
+export type InvoiceStatus = 'RETURNABLE' | 'NON_RETURNABLE';
 
 /** Represents a single row/item found on a receipt. */
 export interface InvoiceItem {

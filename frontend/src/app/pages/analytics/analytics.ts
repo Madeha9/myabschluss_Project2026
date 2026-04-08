@@ -173,7 +173,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   selectedYear = new Date().getFullYear();
   selectedMonth = new Date().getMonth() + 1;
 
-  years = [2026, 2025, 2024];
+  years = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019];
   months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   private storeChartInstance: Chart | null = null;
 

@@ -26,7 +26,9 @@ public class InvoiceReturnService {
         if (invoice.getReturnDays() == null || invoice.getInvoiceDate() == null) {
             return new ReturnStatusInfo(InvoiceStatus.NON_RETURNABLE, 0);
         }
-// Calculate the difference between the purchase date and today
+/* Calculate the difference between the purchase date and today, ChronoUnit java8+ , to calculate the difference between
+two dates and time
+        */
         long daysElapsed = ChronoUnit.DAYS.between(invoice.getInvoiceDate(), LocalDate.now());
         long daysLeft = invoice.getReturnDays() - daysElapsed;
 

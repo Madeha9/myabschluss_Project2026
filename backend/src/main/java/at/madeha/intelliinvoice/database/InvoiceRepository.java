@@ -71,8 +71,11 @@ public class InvoiceRepository {
          * 3. No Duplicates: 'DISTINCT' makes sure we don't get the same invoice 5 times just because
          * it has 5 different items.
          */
+        //we used Desc , so that we can view the new saved invoices , directly on the top
         return em.createQuery(
-                "SELECT DISTINCT i FROM InvoiceEntity i LEFT JOIN FETCH i.items",
+                "SELECT DISTINCT i FROM InvoiceEntity i " +
+                        "LEFT JOIN FETCH i.items " +
+                        "ORDER BY i.invoiceDate DESC, i.id DESC",
                 InvoiceEntity.class
         ).getResultList();
     }

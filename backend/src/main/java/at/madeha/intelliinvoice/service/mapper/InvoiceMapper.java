@@ -45,9 +45,11 @@ public class InvoiceMapper {
         entity.setCurrency(extractedData.getCurrency());
         entity.setVatAmount(extractedData.getVatAmount());
         entity.setInvoiceNumber(extractedData.getInvoiceNumber());
+        entity.setReturnDays(extractedData.getReturnDays());
         ReturnStatusInfo returnStatusInfo = invoiceReturnService.getReturnStatusUpdate(entity);
-        InvoiceStatus status = returnStatusInfo.status(); // the Status from the enum and the record after getting the data from the AI so that we
-        //we can use the Invoice date and it is not null anymore
+        InvoiceStatus status = returnStatusInfo.status();
+        /* the Status from the enum and the record after getting the data from the AI so that we
+         can use the Invoice date, and it is not null anymore */
         LOG.info("Invoice processed. Days left: " + returnStatusInfo.daysLeft());
         // the left days is not saved in the database
         Instant now = Instant.now();
