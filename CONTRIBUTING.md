@@ -241,7 +241,7 @@ public void getUserById_whenUserNotFound_throwsException() {
 
 ## Development Setup
 
-See [docs/setup.md](docs/setup.md) for detailed development environment setup instructions.
+See [docs/setup.md](documentation/docs/setup.md) for detailed development environment setup instructions.
 
 ## Questions?
 

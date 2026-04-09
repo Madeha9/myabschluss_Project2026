@@ -1,0 +1,213 @@
+
+openapi: 3.1.0
+components:
+  schemas:
+    Instant:
+      type: string
+      format: date-time
+      examples:
+      - 2022-03-10T16:15:50Z
+    InvoiceEntity:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        invoiceDate:
+          $ref: "#/components/schemas/LocalDate"
+        storeName:
+          type: string
+        totalAmount:
+          type: number
+        currency:
+          type: string
+        imageUrl:
+          type: string
+        returnDays:
+          type: integer
+          format: int32
+        createdAt:
+          $ref: "#/components/schemas/Instant"
+        updatedAt:
+          $ref: "#/components/schemas/Instant"
+        status:
+          $ref: "#/components/schemas/InvoiceStatus"
+        vatAmount:
+          type: number
+        invoiceNumber:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvoiceItemEntity"
+    InvoiceItemEntity:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        invoice:
+          $ref: "#/components/schemas/InvoiceEntity"
+        description:
+          type: string
+        quantity:
+          type: number
+        unitPrice:
+          type: number
+        lineTotal:
+          type: number
+    InvoiceResponseDTO:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+        currency:
+          type: string
+        id:
+          $ref: "#/components/schemas/UUID"
+        storeName:
+          type: string
+        invoiceDate:
+          $ref: "#/components/schemas/LocalDate"
+        totalAmount:
+          type: number
+        status:
+          type: string
+        daysLeft:
+          type: integer
+          format: int64
+        vatAmount:
+          type: number
+        invoiceNumber:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvoiceItemEntity"
+    InvoiceStatus:
+      type: string
+      enum:
+      - RETURNABLE
+      - NON_RETURNABLE
+    LocalDate:
+      type: string
+      format: date
+      examples:
+      - 2022-03-10
+    UUID:
+      type: string
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+paths:
+  /UploadInvoice:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                uploadInvoice:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      summary: Upload Invoice
+      tags:
+      - Upload Controller
+  /myinvoices:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InvoiceResponseDTO"
+      summary: Get All Invoices
+      tags:
+      - Invoice Controller
+  /myinvoices/search:
+    get:
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InvoiceEntity"
+      summary: Search By Store
+      tags:
+      - Invoice Controller
+  /myinvoices/spending:
+    get:
+      parameters:
+      - name: month
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: year
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      summary: Get Monthly Spending
+      tags:
+      - Invoice Controller
+  /myinvoices/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      summary: Get Invoice
+      tags:
+      - Invoice Controller
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      summary: Delete Invoice
+      tags:
+      - Invoice Controller
+info:
+  title: intelliinvoice-backend API
+  version: 1.0-SNAPSHOT
