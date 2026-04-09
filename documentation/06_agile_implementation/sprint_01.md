@@ -30,13 +30,7 @@ the core invoice upload flow with AWS S3 storage
 |---------------------------------------------------------------|-----------|--------|
 | Set up Maven multi-module project (parent, backend, frontend) | 4h        | Done   |
 | Create InvoiceEntity, InvoiceItemEntity, InvoiceRepository    | 4h        | Done   |
-| Implement UploadController and InvoiceProcessingService       | 6h        | Done   |
 | Integrate AWS S3 via CloudStorageService                      | 4h        | Done   |
-| Integrate Claude Sonnet AI via LangChain4j InvoiceExtractor   | 6h        | Done   |
-| Implement InvoiceValidationService (file + math validation)   | 4h        | Done   |
-| Implement InvoiceReturnService and ReturnStatusInfo           | 3h        | Done   |
-| Set up Angular UI — upload page with step flow                | 5h        | Done   |
-| Manual testing via Postman and Angular UI                     | 4h        | Done   |
 
 **Total estimated: 40h**
 
@@ -60,7 +54,6 @@ the core invoice upload flow with AWS S3 storage
 |---------|--------------------------------------|----------|
 | PBI-001 | Upload JPG invoice to AWS S3         | Accepted |
 | PBI-002 | Claude Sonnet extracts invoice data  | Accepted |
-| PBI-003 | Confirm extracted data before saving | Accepted |
 
 ### Metrics
 
@@ -76,7 +69,6 @@ the core invoice upload flow with AWS S3 storage
 
 ### What went well
 
-- Maven multi-module setup worked cleanly
 - LangChain4j integration with Claude Sonnet was straightforward
 - AWS S3 upload and URL storage worked on first attempt
 

@@ -236,7 +236,7 @@ import {InvoiceResponseDTO, InvoiceStatus} from '../../models/invoice.model';
         </ng-container>
 
         <ng-container matColumnDef="invoiceNumber">
-          <th mat-header-cell *matHeaderCellDef>#</th>
+          <th mat-header-cell *matHeaderCellDef>Number</th>
           <td mat-cell *matCellDef="let inv" class="muted">{{ inv.invoiceNumber ?? '—' }}</td>
         </ng-container>
 

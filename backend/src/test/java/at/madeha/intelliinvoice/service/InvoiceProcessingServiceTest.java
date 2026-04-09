@@ -1,3 +1,8 @@
+/**
+ * Isolated logic tests for the core business services.
+ * This package verifies that individual service workflows and data
+ * transformations are accurate before they are integrated with other modules.
+ */
 //package at.madeha.intelliinvoice.service;
 //
 //import at.madeha.intelliinvoice.database.InvoiceEntity;
